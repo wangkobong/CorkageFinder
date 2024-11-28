@@ -5,14 +5,14 @@ import Feature
 struct AppFeature {
     struct State: Equatable {
         var tab1 = HomeFeature.State()
-        var tab2 = CategoryFeature.State()
-        var tab3 = CommunityFeature.State()
+        var tab2 = CommunityFeature.State()
+        var tab3 = MapFeature.State()
         var tab4 = MypageFeature.State()
     }
     enum Action {
         case tab1(HomeFeature.Action)
-        case tab2(CategoryFeature.Action)
-        case tab3(CommunityFeature.Action)
+        case tab2(CommunityFeature.Action)
+        case tab3(MapFeature.Action)
         case tab4(MypageFeature.Action)
     }
     
@@ -21,10 +21,10 @@ struct AppFeature {
             HomeFeature()
         }
         Scope(state: \.tab2, action: \.tab2) {
-            CategoryFeature()
+            CommunityFeature()
         }
         Scope(state: \.tab3, action: \.tab3) {
-            CommunityFeature()
+            MapFeature()
         }
         Scope(state: \.tab4, action: \.tab4) {
             MypageFeature()

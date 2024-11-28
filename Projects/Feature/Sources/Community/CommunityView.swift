@@ -1,5 +1,5 @@
 //
-//  CommunityView.swift
+//  CategoryView.swift
 //  Feature
 //
 //  Created by sungyeon on 11/28/24.
@@ -14,11 +14,12 @@ public struct CommunityView: View {
     public init(store: StoreOf<CommunityFeature>) {
         self.store = store
     }
+
     public var body: some View {
         Text("CommunityView")
     }
 }
 
 //#Preview {
-//    CommunityView()
+//    CategoryView()
 //}

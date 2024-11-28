@@ -11,36 +11,56 @@ import Feature
 
 struct AppView: View {
     
-//    let store1: StoreOf<CounterFeature>
-//    let store2: StoreOf<CounterFeature>
-    
     let store: StoreOf<AppFeature>
 
     var body: some View {
         TabView {
             HomeView(store: store.scope(state: \.tab1, action: \.tab1))
               .tabItem {
-                Text("홈")
+                  VStack {
+                      Image(systemName: "house.fill")
+                      Text("홈")
+                  }
               }
             
-            CategoryView(store: store.scope(state: \.tab2, action: \.tab2))
+            CommunityView(store: store.scope(state: \.tab2, action: \.tab2))
               .tabItem {
-                Text("카테고리")
+                  VStack {
+                      Image(systemName: "map.fill")
+                      Text("내주변")
+                  }
               }
             
-            CommunityView(store: store.scope(state: \.tab3, action: \.tab3))
+            MapView(store: store.scope(state: \.tab3, action: \.tab3))
               .tabItem {
-                Text("커뮤니티")
+                  VStack {
+                      Image(systemName: "square.and.pencil")
+                      Text("등록")
+                  }
               }
             
             MypageView(store: store.scope(state: \.tab4, action: \.tab4))
               .tabItem {
-                Text("마이페이지")
+                  VStack {
+                      Image(systemName: "person.fill")
+                      Text("마이페이지")
+                  }
               }
         }
     }
 }
 
-//#Preview {
-//    AppView()
-//}
+#Preview {
+    AppView(
+        store: Store(
+            initialState: AppFeature.State(
+                tab1: HomeFeature.State(),
+                tab2: CommunityFeature.State(),
+                tab3: MapFeature.State(),
+                tab4: MypageFeature.State()
+            )
+        ) {
+            AppFeature()
+        }
+    )
+}

@@ -6,12 +6,17 @@ let project = Project(
         .target(
             name: "Feature",
             destinations: .iOS,
-            product: .staticFramework,
+            product: Environment.forPreview.getBoolean(default: false) ? .framework : .staticFramework,
             bundleId: "io.tuist.Feature",
             sources: ["Sources/**"],
             dependencies: [
                 .external(name: "ComposableArchitecture")
-            ]
+            ],
+            settings: .settings(
+                base: [
+                    "ENABLE_PREVIEWS": "YES"
+                ]
+            )
         ),
         .target(
             name: "FeatureTests",

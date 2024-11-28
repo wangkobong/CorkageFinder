@@ -1,5 +1,5 @@
 //
-//  CategoryFeature.swift
+//  CorkageListFeature.swift
 //  Feature
 //
 //  Created by sungyeon on 11/28/24.
@@ -8,18 +8,20 @@
 import ComposableArchitecture
 
 @Reducer
-public struct CategoryFeature: Equatable {
+public struct CorkageListFeature: Equatable {
     @ObservableState
     public struct State: Equatable {
         public var isLoading = false
-        public var isTimerRunning = false
+        let homeCategory: HomeFeature.HomeCategory
 
-        
-        public init() {}
+        public init(homeCategory: HomeFeature.HomeCategory) {
+            self.homeCategory = homeCategory
+
+        }
     }
     
     public enum Action {
-        case category
+        case list
     }
     
     public init() {}
@@ -27,8 +29,9 @@ public struct CategoryFeature: Equatable {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .category:
+            case .list:
                 return .none
+                
             }
         }
     }

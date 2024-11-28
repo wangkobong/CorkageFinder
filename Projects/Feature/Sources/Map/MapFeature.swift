@@ -1,5 +1,5 @@
 //
-//  CategoryFeature.swift
+//  CommunityFeature.swift
 //  Feature
 //
 //  Created by sungyeon on 11/28/24.
@@ -8,7 +8,7 @@
 import ComposableArchitecture
 
 @Reducer
-public struct CommunityFeature: Equatable {
+public struct MapFeature: Equatable {
     @ObservableState
     public struct State: Equatable {
         public var isLoading = false
@@ -19,7 +19,7 @@ public struct CommunityFeature: Equatable {
     }
     
     public enum Action {
-        case community
+        case map
     }
     
     public init() {}
@@ -27,7 +27,7 @@ public struct CommunityFeature: Equatable {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .community:
+            case .map:
                 return .none
             }
         }

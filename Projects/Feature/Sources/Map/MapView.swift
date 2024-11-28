@@ -1,5 +1,5 @@
 //
-//  CategoryView.swift
+//  CommunityView.swift
 //  Feature
 //
 //  Created by sungyeon on 11/28/24.
@@ -8,18 +8,17 @@
 import SwiftUI
 import ComposableArchitecture
 
-public struct CategoryView: View {
-    let store: StoreOf<CategoryFeature>
+public struct MapView: View {
+    let store: StoreOf<MapFeature>
     
-    public init(store: StoreOf<CategoryFeature>) {
+    public init(store: StoreOf<MapFeature>) {
         self.store = store
     }
-
     public var body: some View {
-        Text("CategoryView")
+        Text("MapView")
     }
 }
 
 //#Preview {
-//    CategoryView()
+//    CommunityView()
 //}
