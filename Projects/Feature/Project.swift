@@ -9,7 +9,19 @@ let project = Project(
             product: .staticFramework,
             bundleId: "io.tuist.Feature",
             sources: ["Sources/**"],
-            dependencies: []
-        )
+            dependencies: [
+                .external(name: "ComposableArchitecture")
+            ]
+        ),
+        .target(
+            name: "FeatureTests",
+            destinations: .iOS,
+            product: .unitTests,
+            bundleId: "io.tuist.FeatureTests",
+            infoPlist: .default,
+            sources: ["Tests/**"],
+            resources: [],
+            dependencies: [.target(name: "Feature")]
+        ),
     ]
 )

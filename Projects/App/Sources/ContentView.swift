@@ -1,18 +1,24 @@
-import SwiftUI
-import Feature
-
-public struct ContentView: View {
-    public init() {}
-
-    public var body: some View {
-        TestView()
-    }
-}
-
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        TestView()
-    }
-}
- 
+//import SwiftUI
+//import Feature
+//import ComposableArchitecture
+//
+//public struct ContentView: View {
+//    public init() {}
+//
+//    public var body: some View {
+//        TestView(store: Store(initialState: CounterFeature.State()) {
+//            CounterFeature()
+//          }
+//        )
+//    }
+//}
+//
+//
+//#Preview {
+//    TestView(
+//    store: Store(initialState: CounterFeature.State()) {
+//      CounterFeature()
+//    }
+//  )
+//}
+// 
