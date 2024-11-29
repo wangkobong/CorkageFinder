@@ -17,7 +17,7 @@ public struct HomeView: View {
     
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            VStack {
+            ScrollView(showsIndicators: false) {
                 
                 title
                     .padding(.top)
@@ -29,8 +29,10 @@ public struct HomeView: View {
                     .padding(.bottom)
                 
                 corkageFreeList
+                    .padding(.bottom)
+
                 
-                Spacer()
+//                Spacer()
             }
             .task {
                 await store.send(.fetchHomeData).finish()
@@ -117,63 +119,19 @@ public struct HomeView: View {
             }
             .padding(.leading, 16)
             
-            HStack {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 12) {
-                        // 한식
-                        categoryBox(
-                            title: "한식",
-                            systemImage: "bowl.fill",
-                            emoji: "🍚",
-                            category: .korean
-                        )
-                        
-                        // 일식
-                        categoryBox(
-                            title: "일식",
-                            systemImage: "fish.fill",
-                            emoji: "🍱",
-                            category: .japanese
-                        )
-                        
-                        // 중식
-                        categoryBox(
-                            title: "중식",
-                            systemImage: "wok.fill",
-                            emoji: "🥢",
-                            category: .chinese
-                        )
-                        
-                        // 양식
-                        categoryBox(
-                            title: "양식",
-                            systemImage: "fork.knife",
-                            emoji: "🍝",
-                            category: .western
-                        )
-                        
-                        // 아시안
-                        categoryBox(
-                            title: "아시안",
-                            systemImage: "leaf.fill",
-                            emoji: "🍜",
-                            category: .asian
-                        )
-                        
-                        // 기타
-                        categoryBox(
-                            title: "기타",
-                            systemImage: "ellipsis.circle.fill",
-                            emoji: "🍽️",
-                            category: .etc
-                        )
+            // 추천 식당 리스트
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 16) {
+                    ForEach(store.recommenderRestaurants, id: \.name) { restaurant in
+                        RestaurantCardView(restaurant: restaurant)
                     }
-                    .padding(.horizontal)
                 }
+                .padding(.horizontal)
             }
+            .padding(.bottom)
+            
+            Spacer()
         }
-        
-
     }
     
     private var corkageFreeList: some View {
@@ -189,63 +147,17 @@ public struct HomeView: View {
             }
             .padding(.leading, 16)
             
-            HStack {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 12) {
-                        // 한식
-                        categoryBox(
-                            title: "한식",
-                            systemImage: "bowl.fill",
-                            emoji: "🍚",
-                            category: .korean
-                        )
-                        
-                        // 일식
-                        categoryBox(
-                            title: "일식",
-                            systemImage: "fish.fill",
-                            emoji: "🍱",
-                            category: .japanese
-                        )
-                        
-                        // 중식
-                        categoryBox(
-                            title: "중식",
-                            systemImage: "wok.fill",
-                            emoji: "🥢",
-                            category: .chinese
-                        )
-                        
-                        // 양식
-                        categoryBox(
-                            title: "양식",
-                            systemImage: "fork.knife",
-                            emoji: "🍝",
-                            category: .western
-                        )
-                        
-                        // 아시안
-                        categoryBox(
-                            title: "아시안",
-                            systemImage: "leaf.fill",
-                            emoji: "🍜",
-                            category: .asian
-                        )
-                        
-                        // 기타
-                        categoryBox(
-                            title: "기타",
-                            systemImage: "ellipsis.circle.fill",
-                            emoji: "🍽️",
-                            category: .etc
-                        )
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 16) {
+                    ForEach(store.corkageFreeRestaurants, id: \.name) { restaurant in
+                        RestaurantCardView(restaurant: restaurant)
                     }
-                    .padding(.horizontal)
                 }
+                .padding(.horizontal)
             }
+            .padding(.bottom)
+            
         }
-        
-
     }
     
     private var searchBar: some View {
