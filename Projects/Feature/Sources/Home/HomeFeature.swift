@@ -9,12 +9,21 @@ import ComposableArchitecture
 
 @Reducer
 public struct HomeFeature: Equatable {
+    
+    public static func == (lhs: HomeFeature, rhs: HomeFeature) -> Bool {
+        return true
+    }
+    
+    @Dependency(\.homeClient) var homeClient  // 의존성 주입
+
     @ObservableState
     public struct State: Equatable {
         public var isLoading = false
         public var isTimerRunning = false
         public var searchText: String = ""
         public var isSearching: Bool = false
+        public var recommenderRestaurants: [RestaurantCard] = []
+        public var corkageFreeRestaurants: [RestaurantCard] = []
 
         var path = StackState<CorkageListFeature.State>()
         
@@ -22,33 +31,42 @@ public struct HomeFeature: Equatable {
     }
     
     public enum Action {
+        case fetchHomeData
+        case fetchHomeDataResponse(TaskResult<HomeData>)
         case searchTextChanged(String)
         case searchingStateChanged(Bool)
         case search(String)
         case searchCancel
-        case tapCategoryBox(HomeCategory)
+        case tapCategoryBox(HomeRestaurantCategory)
         case path(StackAction<CorkageListFeature.State, CorkageListFeature.Action>)
     }
     
-    public enum HomeCategory {
-        case wine
-        case baiju
-        case etc
-        
-        var title: String {
-            switch self {
-            case .wine: return "와인"
-            case .baiju: return "바이주"
-            case .etc: return "기타"
-            }
-        }
-    }
+
     
     public init() {}
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .fetchHomeData:
+                state.isLoading = true
+                return .run { [homeClient] send in
+                    await send(.fetchHomeDataResponse(
+                        TaskResult {
+                            try await homeClient.fetch()
+                        }
+                    ))
+                }
+                
+            case let .fetchHomeDataResponse(.success(homeData)):
+                state.recommenderRestaurants = homeData.recommenderRestaurants
+                state.corkageFreeRestaurants = homeData.corkageFreerestaurants
+                return .none
+                
+            case let .fetchHomeDataResponse(.failure(error)):
+                
+                print("페치 실패: \(error)")
+                return .none
             case let .searchTextChanged(text):
                 state.searchText = text
                 return .none
@@ -70,6 +88,7 @@ public struct HomeFeature: Equatable {
                 return .none
             case .path:
                 return .none
+
             }
         }
         .forEach(\.path, action: \.path) {

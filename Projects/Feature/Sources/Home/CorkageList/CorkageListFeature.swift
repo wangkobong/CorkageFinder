@@ -12,9 +12,9 @@ public struct CorkageListFeature: Equatable {
     @ObservableState
     public struct State: Equatable {
         public var isLoading = false
-        let homeCategory: HomeFeature.HomeCategory
+        let homeCategory: HomeRestaurantCategory
 
-        public init(homeCategory: HomeFeature.HomeCategory) {
+        public init(homeCategory: HomeRestaurantCategory) {
             self.homeCategory = homeCategory
 
         }

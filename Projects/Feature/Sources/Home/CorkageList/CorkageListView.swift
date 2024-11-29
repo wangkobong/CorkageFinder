@@ -26,7 +26,7 @@ struct CorkageListView: View {
 #Preview {
     CorkageListView(
         store: Store(
-            initialState: CorkageListFeature.State(homeCategory: .wine)
+            initialState: CorkageListFeature.State(homeCategory: .korean)
         ) {
             CorkageListFeature()
         }

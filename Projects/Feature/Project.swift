@@ -9,6 +9,7 @@ let project = Project(
             product: Environment.forPreview.getBoolean(default: false) ? .framework : .staticFramework,
             bundleId: "io.tuist.Feature",
             sources: ["Sources/**"],
+            resources: ["Resources/**"],
             dependencies: [
                 .external(name: "ComposableArchitecture")
             ],

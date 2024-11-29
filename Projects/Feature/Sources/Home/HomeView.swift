@@ -23,8 +23,17 @@ public struct HomeView: View {
                     .padding(.top)
                 
                 categoryList
+                    .padding(.bottom)
+                
+                hottestList
+                    .padding(.bottom)
+                
+                corkageFreeList
                 
                 Spacer()
+            }
+            .task {
+                await store.send(.fetchHomeData).finish()
             }
         } destination: { store in
             CorkageListView(store: store)
@@ -44,58 +53,199 @@ public struct HomeView: View {
     }
     
     private var categoryList: some View {
-        HStack {
-            HStack(spacing: 12) {
-                // 와인 박스
-                VStack {
-                    Image(systemName: "wineglass.fill")
-                        .font(.system(size: 24))
-                        .padding(.bottom, 5)
-                    Text("와인")
-                        .font(.system(size: 14, weight: .medium))
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .onTapGesture {
-                    store.send(.tapCategoryBox(.wine))
-                }
+       VStack(spacing: 12) {
+           // 상단 행
+           HStack(spacing: 12) {
+               categoryBox(
+                   title: "한식",
+                   systemImage: "bowl.fill",
+                   emoji: "🍚",
+                   category: .korean
+               )
+               
+               categoryBox(
+                   title: "일식",
+                   systemImage: "fish.fill",
+                   emoji: "🍱",
+                   category: .japanese
+               )
+               
+               categoryBox(
+                   title: "중식",
+                   systemImage: "wok.fill",
+                   emoji: "🥢",
+                   category: .chinese
+               )
+           }
+           
+           // 하단 행
+           HStack(spacing: 12) {
+               categoryBox(
+                   title: "양식",
+                   systemImage: "fork.knife",
+                   emoji: "🍝",
+                   category: .western
+               )
+               
+               categoryBox(
+                   title: "아시안",
+                   systemImage: "leaf.fill",
+                   emoji: "🍜",
+                   category: .asian
+               )
+               
+               categoryBox(
+                   title: "기타",
+                   systemImage: "ellipsis.circle.fill",
+                   emoji: "🍽️",
+                   category: .etc
+               )
+           }
+       }
+       .padding(.horizontal)
+    }
+    
+    private var hottestList: some View {
+        
+        VStack {
+            HStack {
+                Text("실시간 인기 콜키지")
+                    .font(.headline)
+                    .foregroundStyle(.black)
                 
-                // 고량주 박스
-                VStack {
-                    Image(systemName: "drop.fill")  // 또는 "bottle.fill"
-                        .font(.system(size: 24))
-                        .padding(.bottom, 5)
-                    Text("바이주")
-                        .font(.system(size: 14, weight: .medium))
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .onTapGesture {
-                    store.send(.tapCategoryBox(.baiju))
-                }
-                
-                // 기타 박스
-                VStack {
-                    Image(systemName: "ellipsis.circle.fill")
-                        .font(.system(size: 24))
-                        .padding(.bottom, 5)
-                    Text("기타")
-                        .font(.system(size: 14, weight: .medium))
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .onTapGesture {
-                    store.send(.tapCategoryBox(.etc))
+                Spacer()
+            }
+            .padding(.leading, 16)
+            
+            HStack {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        // 한식
+                        categoryBox(
+                            title: "한식",
+                            systemImage: "bowl.fill",
+                            emoji: "🍚",
+                            category: .korean
+                        )
+                        
+                        // 일식
+                        categoryBox(
+                            title: "일식",
+                            systemImage: "fish.fill",
+                            emoji: "🍱",
+                            category: .japanese
+                        )
+                        
+                        // 중식
+                        categoryBox(
+                            title: "중식",
+                            systemImage: "wok.fill",
+                            emoji: "🥢",
+                            category: .chinese
+                        )
+                        
+                        // 양식
+                        categoryBox(
+                            title: "양식",
+                            systemImage: "fork.knife",
+                            emoji: "🍝",
+                            category: .western
+                        )
+                        
+                        // 아시안
+                        categoryBox(
+                            title: "아시안",
+                            systemImage: "leaf.fill",
+                            emoji: "🍜",
+                            category: .asian
+                        )
+                        
+                        // 기타
+                        categoryBox(
+                            title: "기타",
+                            systemImage: "ellipsis.circle.fill",
+                            emoji: "🍽️",
+                            category: .etc
+                        )
+                    }
+                    .padding(.horizontal)
                 }
             }
-            .padding(.horizontal)
         }
+        
+
+    }
+    
+    private var corkageFreeList: some View {
+        
+        VStack {
+            
+            HStack {
+                Text("콜키지 프리")
+                    .font(.headline)
+                    .foregroundStyle(.black)
+                
+                Spacer()
+            }
+            .padding(.leading, 16)
+            
+            HStack {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        // 한식
+                        categoryBox(
+                            title: "한식",
+                            systemImage: "bowl.fill",
+                            emoji: "🍚",
+                            category: .korean
+                        )
+                        
+                        // 일식
+                        categoryBox(
+                            title: "일식",
+                            systemImage: "fish.fill",
+                            emoji: "🍱",
+                            category: .japanese
+                        )
+                        
+                        // 중식
+                        categoryBox(
+                            title: "중식",
+                            systemImage: "wok.fill",
+                            emoji: "🥢",
+                            category: .chinese
+                        )
+                        
+                        // 양식
+                        categoryBox(
+                            title: "양식",
+                            systemImage: "fork.knife",
+                            emoji: "🍝",
+                            category: .western
+                        )
+                        
+                        // 아시안
+                        categoryBox(
+                            title: "아시안",
+                            systemImage: "leaf.fill",
+                            emoji: "🍜",
+                            category: .asian
+                        )
+                        
+                        // 기타
+                        categoryBox(
+                            title: "기타",
+                            systemImage: "ellipsis.circle.fill",
+                            emoji: "🍽️",
+                            category: .etc
+                        )
+                    }
+                    .padding(.horizontal)
+                }
+            }
+        }
+        
+
     }
     
     private var searchBar: some View {
@@ -135,6 +285,35 @@ public struct HomeView: View {
             }
         }
         .padding(.horizontal)
+    }
+    
+    private func categoryBox(title: String, systemImage: String, emoji: String, category: HomeRestaurantCategory) -> some View {
+        VStack {
+            //           Image(systemName: systemImage)
+            //               .font(.system(size: 24))
+            //               .padding(.bottom, 5)
+            Text(emoji)
+                .font(.system(size: 24))
+                .padding(.bottom, 5)
+            Text(title)
+                .font(.system(size: 14, weight: .medium))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
+        .onTapGesture {
+            store.send(.tapCategoryBox(category))
+        }
+    }
+    
+    private func restaurantBox() -> some View {
+        VStack {
+            
+        }
+        .frame(width: 130, height: 200)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
     }
 }
 

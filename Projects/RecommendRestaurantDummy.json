@@ -1,0 +1,186 @@
+{
+ "recommenderRestaurants": [
+   {
+     "imageURL": "restaurant1.jpg",
+     "name": "우리집 레스토랑",
+     "category": "korean",
+     "isCorkageFree": false,
+     "corkageFee": "30,000원",
+     "sido": "서울특별시",
+     "sigungu": "강남구"
+   },
+   {
+     "imageURL": "restaurant2.jpg",
+     "name": "사쿠라 스시",
+     "category": "japanese",
+     "isCorkageFree": false,
+     "corkageFee": "50,000원",
+     "sido": "서울특별시",
+     "sigungu": "마포구"
+   },
+   {
+     "imageURL": "restaurant3.jpg",
+     "name": "진짜 중국집",
+     "category": "chinese",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "서초구"
+   },
+   {
+     "imageURL": "restaurant4.jpg",
+     "name": "라 트라토리아",
+     "category": "western",
+     "isCorkageFree": false,
+     "corkageFee": "40,000원",
+     "sido": "서울특별시",
+     "sigungu": "용산구"
+   },
+   {
+     "imageURL": "restaurant5.jpg",
+     "name": "포먼타이",
+     "category": "asian",
+     "isCorkageFree": false,
+     "corkageFee": "20,000원",
+     "sido": "서울특별시",
+     "sigungu": "송파구"
+   },
+   {
+     "imageURL": "restaurant6.jpg",
+     "name": "서울 한식당",
+     "category": "korean",
+     "isCorkageFree": false,
+     "corkageFee": "25,000원",
+     "sido": "서울특별시",
+     "sigungu": "종로구"
+   },
+   {
+     "imageURL": "restaurant7.jpg",
+     "name": "오마카세 진",
+     "category": "japanese",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "강서구"
+   },
+   {
+     "imageURL": "restaurant8.jpg",
+     "name": "퓨전 키친",
+     "category": "etc",
+     "isCorkageFree": false,
+     "corkageFee": "35,000원",
+     "sido": "서울특별시",
+     "sigungu": "영등포구"
+   },
+   {
+     "imageURL": "restaurant9.jpg",
+     "name": "방콕 스트릿",
+     "category": "asian",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "경기도",
+     "sigungu": "성남시"
+   },
+   {
+     "imageURL": "restaurant10.jpg",
+     "name": "비스트로 파리",
+     "category": "western",
+     "isCorkageFree": false,
+     "corkageFee": "45,000원",
+     "sido": "경기도",
+     "sigungu": "수원시"
+   }
+ ],
+ "corkageFreerestaurants": [
+   {
+     "imageURL": "restaurant1.jpg",
+     "name": "와인 애호가",
+     "category": "western",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "강남구"
+   },
+   {
+     "imageURL": "restaurant2.jpg",
+     "name": "마포 한식당",
+     "category": "korean",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "마포구"
+   },
+   {
+     "imageURL": "restaurant3.jpg",
+     "name": "페어링 다이닝",
+     "category": "western",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "서초구"
+   },
+   {
+     "imageURL": "restaurant4.jpg",
+     "name": "스시 오마카세",
+     "category": "japanese",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "용산구"
+   },
+   {
+     "imageURL": "restaurant5.jpg",
+     "name": "퓨전 아시안",
+     "category": "asian",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "성동구"
+   },
+   {
+     "imageURL": "restaurant6.jpg",
+     "name": "대만 반점",
+     "category": "chinese",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "송파구"
+   },
+   {
+     "imageURL": "restaurant7.jpg",
+     "name": "모던 한식",
+     "category": "korean",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "경기도",
+     "sigungu": "성남시"
+   },
+   {
+     "imageURL": "restaurant8.jpg",
+     "name": "비스트로 169",
+     "category": "western",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "강남구"
+   },
+   {
+     "imageURL": "restaurant9.jpg",
+     "name": "타이 키친",
+     "category": "asian",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "서울특별시",
+     "sigungu": "종로구"
+   },
+   {
+     "imageURL": "restaurant10.jpg",
+     "name": "이자카야 료",
+     "category": "japanese",
+     "isCorkageFree": true,
+     "corkageFee": "무료",
+     "sido": "경기도",
+     "sigungu": "분당구"
+   }
+ ]
+}
