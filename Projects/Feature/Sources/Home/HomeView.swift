@@ -38,14 +38,19 @@ public struct HomeView: View {
                 await store.send(.fetchHomeData).finish()
             }
         } destination: { store in
-            CorkageListView(store: store)
+            switch store.case {
+            case let .categoryList(state):
+                CorkageListView(store: state)
+            case let .restaurantDetail(state):
+                RestaurantDetailView(store: state)
+            }
         }
 
     }
     
     private var title: some View {
         HStack {
-            Text("테스트")
+            Text("CorkageFinder")
                 .font(.largeTitle)
                 .foregroundStyle(.black)
             
@@ -124,6 +129,9 @@ public struct HomeView: View {
                 LazyHStack(spacing: 16) {
                     ForEach(store.recommenderRestaurants, id: \.name) { restaurant in
                         RestaurantCardView(restaurant: restaurant)
+                            .onTapGesture {
+                                store.send(.restaurantDetailTap(restaurant))
+                            }
                     }
                 }
                 .padding(.horizontal)
@@ -151,6 +159,9 @@ public struct HomeView: View {
                 LazyHStack(spacing: 16) {
                     ForEach(store.corkageFreeRestaurants, id: \.name) { restaurant in
                         RestaurantCardView(restaurant: restaurant)
+                            .onTapGesture {
+                                store.send(.restaurantDetailTap(restaurant))
+                            }
                     }
                 }
                 .padding(.horizontal)

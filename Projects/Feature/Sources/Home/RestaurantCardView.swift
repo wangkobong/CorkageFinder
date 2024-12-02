@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct RestaurantCardView: View {
     let restaurant: RestaurantCard
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             // 이미지 플레이스홀더

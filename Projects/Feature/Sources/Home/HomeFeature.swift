@@ -25,7 +25,7 @@ public struct HomeFeature: Equatable {
         public var recommenderRestaurants: [RestaurantCard] = []
         public var corkageFreeRestaurants: [RestaurantCard] = []
 
-        var path = StackState<CorkageListFeature.State>()
+        public var path = StackState<Path.State>()
         
         public init() {}
     }
@@ -38,10 +38,15 @@ public struct HomeFeature: Equatable {
         case search(String)
         case searchCancel
         case tapCategoryBox(HomeRestaurantCategory)
-        case path(StackAction<CorkageListFeature.State, CorkageListFeature.Action>)
+        case path(StackActionOf<Path>)
+        case restaurantDetailTap(RestaurantCard)
     }
     
-
+    @Reducer(state: .equatable)
+    public enum Path {
+        case categoryList(CorkageListFeature)
+        case restaurantDetail(RestaurantDetailFeature)
+    }
     
     public init() {}
     
@@ -84,16 +89,18 @@ public struct HomeFeature: Equatable {
                 return .none
                 
             case let .tapCategoryBox(category):
-                state.path.append(CorkageListFeature.State(homeCategory: category))
+                state.path.append(.categoryList(CorkageListFeature.State(homeCategory: category)))
                 return .none
-            case .path:
+                
+            case let .path(action):
                 return .none
-
+                
+            case let .restaurantDetailTap(restaurant):
+                state.path.append(.restaurantDetail(RestaurantDetailFeature.State(restaurant: restaurant))) // 수정
+                return .none
             }
         }
-        .forEach(\.path, action: \.path) {
-            CorkageListFeature()
-        }
+        .forEach(\.path, action: \.path)
     }
     
 }
