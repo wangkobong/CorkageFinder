@@ -17,8 +17,12 @@ struct CorkageListView: View {
     }
     
     var body: some View {
-        Form {
+        List(store.restaurants, id: \.name) { restaurant in
+            RestaurantRowView(restaurant: restaurant)
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
         }
+        .listStyle(.plain)
         .navigationTitle(Text(store.homeCategory.title))
         .task {
             await store.send(.fetchRestaurantList).finish()

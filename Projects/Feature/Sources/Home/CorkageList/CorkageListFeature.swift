@@ -20,6 +20,7 @@ public struct CorkageListFeature: Equatable {
     public struct State: Equatable {
         public var isLoading = false
         let homeCategory: HomeRestaurantCategory
+        public var restaurants: [RestaurantCard] = []
 
         public init(homeCategory: HomeRestaurantCategory) {
             self.homeCategory = homeCategory
@@ -46,8 +47,10 @@ public struct CorkageListFeature: Equatable {
                     ))
                 }
                 
-            case let .fetchHomeDataResponse(.success(restaurants)):
-                print("restaurants: \(restaurants)")
+            case let .fetchHomeDataResponse(.success(fetchedData)):
+                let filteredRestaurants = fetchedData.restaurants.filter { $0.category == state.homeCategory }
+                    state.restaurants = filteredRestaurants
+                
                 return .none
                 
             case let .fetchHomeDataResponse(.failure(error)):
