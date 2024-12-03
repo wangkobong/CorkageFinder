@@ -49,3 +49,20 @@ public struct RestaurantCard: Codable, Equatable {
         self.corkageNote = corkageNote
     }
 }
+
+extension RestaurantCard {
+    public static let preview = RestaurantCard(
+           imageURL: "https://example.com/image.jpg",
+           name: "와인과 식사",
+           category: .korean, 
+           isCorkageFree: false,
+           corkageFee: "30,000원",
+           sido: "서울특별시",
+           sigungu: "강남구",
+           phoneNumber: "02-1234-5678",
+           address: "서울특별시 강남구 테헤란로 123",
+           businessHours: "11:30 - 22:00",
+           closedDays: "매주 월요일",
+           corkageNote: "와인 한 병당 콜키지 30,000원"
+       )
+}

@@ -20,6 +20,9 @@ struct CorkageListView: View {
         Form {
         }
         .navigationTitle(Text(store.homeCategory.title))
+        .task {
+            await store.send(.fetchRestaurantList).finish()
+        }
     }
 }
 

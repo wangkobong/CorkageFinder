@@ -92,7 +92,7 @@ public struct HomeFeature: Equatable {
                 state.path.append(.categoryList(CorkageListFeature.State(homeCategory: category)))
                 return .none
                 
-            case let .path(action):
+            case .path(_):
                 return .none
                 
             case let .restaurantDetailTap(restaurant):

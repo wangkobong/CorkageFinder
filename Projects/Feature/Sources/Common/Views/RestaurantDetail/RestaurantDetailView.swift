@@ -77,25 +77,6 @@ struct RestaurantDetailView: View {
     }
 }
 
-
-
-extension RestaurantCard {
-   static let preview = RestaurantCard(
-       imageURL: "restaurant1.jpg",
-       name: "우리집 레스토랑",
-       category: .korean,
-       isCorkageFree: false,
-       corkageFee: "30,000원",
-       sido: "서울특별시",
-       sigungu: "강남구",
-       phoneNumber: "02-555-1234",
-       address: "서울특별시 강남구 신사동 123-45",
-       businessHours: "11:30 - 22:00",
-       closedDays: "매주 월요일",
-       corkageNote: "와인 1병당 30,000원, 최대 2병까지 가능"
-   )
-}
-
 #Preview {
    NavigationView {
        RestaurantDetailView(
