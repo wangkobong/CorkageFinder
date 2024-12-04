@@ -92,15 +92,26 @@ public struct HomeFeature: Equatable {
                 state.path.append(.categoryList(CorkageListFeature.State(homeCategory: category)))
                 return .none
                 
-            case .path(_):
-                return .none
+            case let .path(.element(_, action)):
+                switch action {
+                case let .categoryList(.restaurantTapped(restaurant)):
+                    state.path.append(.restaurantDetail(RestaurantDetailFeature.State(restaurant: restaurant)))
+                    return .none
+                default:
+                    return .none
+                }
                 
             case let .restaurantDetailTap(restaurant):
-                state.path.append(.restaurantDetail(RestaurantDetailFeature.State(restaurant: restaurant))) // 수정
+                state.path.append(.restaurantDetail(RestaurantDetailFeature.State(restaurant: restaurant))) 
                 return .none
+            case .path(.popFrom(id: _)):
+                return .none
+
+            case .path(.push(id: _, state: let state)):
+                return .none
+
             }
         }
         .forEach(\.path, action: \.path)
     }
-    
 }

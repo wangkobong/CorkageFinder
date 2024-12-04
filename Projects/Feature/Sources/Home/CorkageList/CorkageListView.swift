@@ -21,6 +21,9 @@ struct CorkageListView: View {
             RestaurantRowView(restaurant: restaurant)
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
+                .onTapGesture {
+                    store.send(.restaurantTapped(restaurant))
+                }
         }
         .listStyle(.plain)
         .navigationTitle(Text(store.homeCategory.title))

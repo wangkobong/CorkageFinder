@@ -21,7 +21,7 @@ public struct CorkageListFeature: Equatable {
         public var isLoading = false
         let homeCategory: HomeRestaurantCategory
         public var restaurants: [RestaurantCard] = []
-
+        
         public init(homeCategory: HomeRestaurantCategory) {
             self.homeCategory = homeCategory
         }
@@ -30,7 +30,7 @@ public struct CorkageListFeature: Equatable {
     public enum Action {
         case fetchRestaurantList
         case fetchHomeDataResponse(TaskResult<Restaurants>)
-
+        case restaurantTapped(RestaurantCard)
     }
     
     public init() {}
@@ -56,6 +56,9 @@ public struct CorkageListFeature: Equatable {
             case let .fetchHomeDataResponse(.failure(error)):
                 
                 print("페치 실패: \(error)")
+                return .none
+                
+            case .restaurantTapped(_):
                 return .none
             }
         }
