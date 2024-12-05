@@ -8,7 +8,7 @@
 import ComposableArchitecture
 
 @Reducer
-public struct CommunityFeature: Equatable {
+public struct RegisterRestaurantFeature: Equatable {
     @ObservableState
     public struct State: Equatable {
         public var isLoading = false

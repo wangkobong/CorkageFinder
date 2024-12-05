@@ -107,7 +107,7 @@ public struct HomeFeature: Equatable {
             case .path(.popFrom(id: _)):
                 return .none
 
-            case .path(.push(id: _, state: let state)):
+            case .path(.push(id: _, state: _)):
                 return .none
 
             }

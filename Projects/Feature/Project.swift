@@ -1,4 +1,5 @@
 import ProjectDescription
+import ProjectDescriptionHelpers
 
 let project = Project(
     name: "Feature",
@@ -11,11 +12,13 @@ let project = Project(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
-                .external(name: "ComposableArchitecture")
+                .external(name: "ComposableArchitecture"),
+                .external(name: "KakaoMapsSDK-SPM")
             ],
             settings: .settings(
                 base: [
-                    "ENABLE_PREVIEWS": "YES"
+                    "ENABLE_PREVIEWS": "YES",
+                    "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey)
                 ]
             )
         ),

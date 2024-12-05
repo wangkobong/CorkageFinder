@@ -23,7 +23,7 @@ struct AppView: View {
                   }
               }
             
-            CommunityView(store: store.scope(state: \.tab2, action: \.tab2))
+            MapView(store: store.scope(state: \.tab2, action: \.tab2))
               .tabItem {
                   VStack {
                       Image(systemName: "map.fill")
@@ -31,7 +31,7 @@ struct AppView: View {
                   }
               }
             
-            MapView(store: store.scope(state: \.tab3, action: \.tab3))
+            RegisterRestaurantView(store: store.scope(state: \.tab3, action: \.tab3))
               .tabItem {
                   VStack {
                       Image(systemName: "square.and.pencil")
@@ -55,8 +55,8 @@ struct AppView: View {
         store: Store(
             initialState: AppFeature.State(
                 tab1: HomeFeature.State(),
-                tab2: CommunityFeature.State(),
-                tab3: MapFeature.State(),
+                tab2: MapFeature.State(),
+                tab3: RegisterRestaurantFeature.State(),
                 tab4: MypageFeature.State()
             )
         ) {

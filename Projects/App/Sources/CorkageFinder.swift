@@ -1,9 +1,14 @@
 import SwiftUI
 import Feature
 import ComposableArchitecture
+import KakaoMapsSDK
 
 @main
 struct CorkageFinderApp: App {
+    
+    init() {
+
+    }
     
     static let store = Store(initialState: AppFeature.State()) {
         AppFeature()
@@ -12,6 +17,12 @@ struct CorkageFinderApp: App {
     var body: some Scene {
         WindowGroup {
             AppView(store: CorkageFinderApp.store)
+                .onAppear {
+                    if let appKey = Bundle.main.infoDictionary?["KAKAO_APP_KEY"] as? String {
+                        print("앱키: \(appKey)")
+                        SDKInitializer.InitSDK(appKey: appKey)
+                    }
+                }
         }
     }
 }

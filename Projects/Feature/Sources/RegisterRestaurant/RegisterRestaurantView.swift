@@ -8,18 +8,18 @@
 import SwiftUI
 import ComposableArchitecture
 
-public struct CommunityView: View {
-    let store: StoreOf<CommunityFeature>
+public struct RegisterRestaurantView: View {
+    let store: StoreOf<RegisterRestaurantFeature>
     
-    public init(store: StoreOf<CommunityFeature>) {
+    public init(store: StoreOf<RegisterRestaurantFeature>) {
         self.store = store
     }
 
     public var body: some View {
-        Text("CommunityView")
+        Text("RegisterRestaurantView")
     }
 }
 
 //#Preview {
-//    CategoryView()
+//    RegisterRestaurantView()
 //}

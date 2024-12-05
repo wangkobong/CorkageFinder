@@ -17,12 +17,12 @@ public struct HomeClient {
             throw HTTPError.invalidURL
         }
         
-        print(Bundle.main.bundlePath)  // 번들 경로 출력
-        if let url = Bundle.main.url(forResource: "RecommendRestaurantDummy", withExtension: "json") {
-            print("Found JSON at: \(url)")
-        } else {
-            print("JSON file not found")
-        }
+//        print(Bundle.main.bundlePath)  // 번들 경로 출력
+//        if let url = Bundle.main.url(forResource: "RecommendRestaurantDummy", withExtension: "json") {
+//            print("Found JSON at: \(url)")
+//        } else {
+//            print("JSON file not found")
+//        }
         
         let decoder = JSONDecoder()
         return try decoder.decode(HomeData.self, from: data)
