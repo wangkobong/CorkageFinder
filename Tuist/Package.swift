@@ -9,7 +9,7 @@ import PackageDescription
     let packageSettings = PackageSettings(
         productTypes: [
             "ComposableArchitecture": .framework,
-            "KakaoMapsSDK-SPM": .framework
+            "KakaoMapsSDK-SPM": .staticLibrary
         ]
     )
 

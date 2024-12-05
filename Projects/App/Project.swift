@@ -8,8 +8,8 @@ let project = Project(
             name: "CorkageFinder",
             destinations: .iOS,
             product: .app,
-            bundleId: "net.daum.maps.d3ftest.KakaoMapsSDKSample", // io.tuist.CorkageFinder
-//            bundleId: "io.tuist.CorkageFinder", // io.tuist.CorkageFinder
+//            bundleId: "net.daum.maps.d3ftest.KakaoMapsSDKSample", // io.tuist.CorkageFinder
+            bundleId: "io.tuist.CorkageFinder", // io.tuist.CorkageFinder
 
             infoPlist: .extendingDefault(
                 with: [
