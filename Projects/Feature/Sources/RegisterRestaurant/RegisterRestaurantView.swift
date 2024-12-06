@@ -50,7 +50,10 @@ public struct RegisterRestaurantView: View {
                     TextField("휴무일", text: $store.closedDays.sending(\.closedDaysChanged))
                 }
                 
-                Button(action: saveRestaurant) {
+                
+                Button {
+                    store.send(.saveButtonTapped)
+                } label: {
                     Text("저장하기")
                         .frame(maxWidth: .infinity)
                         .foregroundColor(.white)
@@ -59,11 +62,6 @@ public struct RegisterRestaurantView: View {
             }
             .navigationTitle("레스토랑 정보 입력")
         }
-    }
-    
-    private func saveRestaurant() {
-     
-        dismiss()
     }
 }
 
