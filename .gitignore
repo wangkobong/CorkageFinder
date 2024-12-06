@@ -71,3 +71,6 @@ Tuist/.build
 
 # API Keys
 Tuist/ProjectDescriptionHelpers/SecretConfig.swift
+
+# Firebase
+App/Resources/GoogleService-Info.plist
