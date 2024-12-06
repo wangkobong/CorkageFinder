@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum HomeRestaurantCategory: String, Codable {
+public enum HomeRestaurantCategory: String, Codable, CaseIterable {
     case korean    // 한식
     case japanese  // 일식
     case chinese   // 중식
@@ -56,3 +56,5 @@ public enum HTTPError: Error {
     case invalidData
     case networkError
 }
+
+
