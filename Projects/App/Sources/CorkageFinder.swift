@@ -2,6 +2,7 @@ import SwiftUI
 import Feature
 import ComposableArchitecture
 import KakaoMapsSDK
+import FirebaseCore
 
 @main
 struct CorkageFinderApp: App {
@@ -22,6 +23,7 @@ struct CorkageFinderApp: App {
                         print("앱키: \(appKey)")
                         SDKInitializer.InitSDK(appKey: appKey)
                     }
+                    FirebaseApp.configure()
                 }
         }
     }

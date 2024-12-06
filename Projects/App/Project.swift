@@ -8,9 +8,7 @@ let project = Project(
             name: "CorkageFinder",
             destinations: .iOS,
             product: .app,
-//            bundleId: "net.daum.maps.d3ftest.KakaoMapsSDKSample", // io.tuist.CorkageFinder
-            bundleId: "io.tuist.CorkageFinder", // io.tuist.CorkageFinder
-
+            bundleId: "io.tuist.CorkageFinder",
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchStoryboardName": "LaunchScreen.storyboard",
@@ -22,11 +20,15 @@ let project = Project(
             dependencies: [
                 .project(target: "Feature", path: "../Feature"),
                 .external(name: "ComposableArchitecture"),
-                .external(name: "KakaoMapsSDK-SPM")
+                .external(name: "KakaoMapsSDK-SPM"),
+                .external(name: "FirebaseAnalytics"),
+                .external(name: "FirebaseAuth"),
+                .external(name: "FirebaseFirestore")
             ],
             settings: .settings(
                 base: [
-                    "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey)
+                    "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey),
+                    "OTHER_LDFLAGS": ["-ObjC"]
                 ]
             )
         ),
