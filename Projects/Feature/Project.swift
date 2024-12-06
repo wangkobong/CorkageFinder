@@ -13,7 +13,10 @@ let project = Project(
             resources: ["Resources/**"],
             dependencies: [
                 .external(name: "ComposableArchitecture"),
-                .external(name: "KakaoMapsSDK-SPM")
+                .external(name: "KakaoMapsSDK-SPM"),
+                .external(name: "FirebaseAnalytics"),
+                .external(name: "FirebaseAuth"),
+                .external(name: "FirebaseFirestore")
             ],
             settings: .settings(
                 base: [
