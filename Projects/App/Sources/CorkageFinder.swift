@@ -3,13 +3,13 @@ import Feature
 import ComposableArchitecture
 import KakaoMapsSDK
 import FirebaseCore
+import FirebaseFirestore
+import FirebaseModule
 
 @main
 struct CorkageFinderApp: App {
     
-    init() {
-
-    }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     static let store = Store(initialState: AppFeature.State()) {
         AppFeature()
@@ -23,8 +23,8 @@ struct CorkageFinderApp: App {
                         print("앱키: \(appKey)")
                         SDKInitializer.InitSDK(appKey: appKey)
                     }
-                    FirebaseApp.configure()
                 }
         }
     }
 }
+

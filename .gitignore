@@ -73,4 +73,6 @@ Tuist/.build
 Tuist/ProjectDescriptionHelpers/SecretConfig.swift
 
 # Firebase
-App/Resources/GoogleService-Info.plist
+Projects/App/Resources/GoogleService-Info.plist
+Projects/FirebaseModule/Resources/GoogleService-Info.plist
+

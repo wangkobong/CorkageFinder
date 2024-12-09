@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import FirebaseModule
 
 public struct RegisterRestaurantClient {
    var test: () async throws -> Restaurants
@@ -24,7 +25,10 @@ public struct RegisterRestaurantClient {
        },
        saveRestaurant: { restaurant in  // 테스트용 저장 구현
            // 여기서는 테스트를 위해 항상 성공 반환
-           try await Task.sleep(nanoseconds: 1_000_000_000)  // 1초 딜레이
+//           try await Task.sleep(nanoseconds: 1_000_000_000)  // 1초 딜레이
+//           try await FirebaseClient.live.addDocument(["테스트":1])
+           try await FirebaseClient.live.getDocument()
+
            return true
        }
    )

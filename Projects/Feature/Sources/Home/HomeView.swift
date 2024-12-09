@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import KakaoMapsSDK
+import FirebaseFirestore
 
 public struct HomeView: View {
     @Bindable var store: StoreOf<HomeFeature>
@@ -42,12 +43,6 @@ public struct HomeView: View {
                 CorkageListView(store: state)
             case let .restaurantDetail(state):
                 RestaurantDetailView(store: state)
-            }
-        }
-        .onAppear {
-            if let appKey = Bundle.main.infoDictionary?["KAKAO_APP_KEY"] as? String {
-                print("앱키: \(appKey)")
-                SDKInitializer.InitSDK(appKey: appKey)
             }
         }
     }
