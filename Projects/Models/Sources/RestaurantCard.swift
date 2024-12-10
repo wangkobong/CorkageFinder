@@ -20,6 +20,8 @@ public struct RestaurantCard: Codable, Equatable {
     public let businessHours: String
     public let closedDays: String
     public let corkageNote: String
+    public var latitude: Double?
+    public var longitude: Double?
     
     public init(
         imageURL: String,
@@ -33,7 +35,9 @@ public struct RestaurantCard: Codable, Equatable {
         address: String,
         businessHours: String,
         closedDays: String,
-        corkageNote: String
+        corkageNote: String,
+        latitude: Double,
+        longitude: Double
     ) {
         self.imageURL = imageURL
         self.name = name
@@ -47,6 +51,8 @@ public struct RestaurantCard: Codable, Equatable {
         self.businessHours = businessHours
         self.closedDays = closedDays
         self.corkageNote = corkageNote
+        self.latitude = latitude
+        self.longitude = longitude
     }
 }
 
@@ -54,7 +60,7 @@ extension RestaurantCard {
     public static let preview = RestaurantCard(
            imageURL: "https://example.com/image.jpg",
            name: "와인과 식사",
-           category: .korean, 
+           category: .korean,
            isCorkageFree: false,
            corkageFee: "30,000원",
            sido: "서울특별시",
@@ -63,6 +69,8 @@ extension RestaurantCard {
            address: "서울특별시 강남구 테헤란로 123",
            businessHours: "11:30 - 22:00",
            closedDays: "매주 월요일",
-           corkageNote: "와인 한 병당 콜키지 30,000원"
+           corkageNote: "와인 한 병당 콜키지 30,000원",
+           latitude: 37.4979,      // 추가 (예시 좌표)
+           longitude: 127.0276     // 추가 (예시 좌표)
        )
 }

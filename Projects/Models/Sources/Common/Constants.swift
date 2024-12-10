@@ -51,6 +51,7 @@ public enum HomeRestaurantCategory: String, Codable, CaseIterable {
 }
 
 public enum HTTPError: Error {
+    case missingAPIKey
     case invalidURL
     case invalidResponse
     case invalidData

@@ -43,16 +43,5 @@ struct RestaurantCardView: View {
 }
 
 #Preview {
-    RestaurantCardView(restaurant: RestaurantCard(imageURL: "",
-                                                  name: "이자카야 료",
-                                                  category: .japanese,
-                                                  isCorkageFree: true,
-                                                  corkageFee: "무료",
-                                                  sido: "경기도",
-                                                  sigungu: "분당구",
-                                                  phoneNumber: "031-712-5678",
-                                                  address: "경기도 성남시 분당구 수내동 012-34",
-                                                  businessHours: "17:00 - 23:30",
-                                                  closedDays: "매주 월요일",
-                                                  corkageNote: "콜키지 무료, 일본 사케 반입 가능"))
+    RestaurantCardView(restaurant: RestaurantCard.preview)
 }

@@ -40,9 +40,17 @@ public struct RegisterRestaurantView: View {
                 }
                 
                 Section(header: Text("위치 정보")) {
-                    TextField("시/도", text: $store.sido.sending(\.sidoChanged))
-                    TextField("시/군/구", text: $store.sigungu.sending(\.sigunguChanged))
+//                    TextField("시/도", text: $store.sido.sending(\.sidoChanged))
+//                    TextField("시/군/구", text: $store.sigungu.sending(\.sigunguChanged))
                     TextField("주소", text: $store.address.sending(\.addressChanged))
+                    Button {
+                        store.send(.validateAdress(store.address))
+                    } label: {
+                        Text("주소 검색")
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.white)
+                    }
+                    .listRowBackground(Color.blue)
                 }
                 
                 Section(header: Text("연락처 및 영업시간")) {

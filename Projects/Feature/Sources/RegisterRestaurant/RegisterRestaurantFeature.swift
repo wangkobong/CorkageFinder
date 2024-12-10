@@ -16,12 +16,12 @@ public struct RegisterRestaurantFeature: Equatable {
     }
     
     @Dependency(\.registerRestaurantClient) var registerRestaurantClient  // 저장 API 클라이언트 의존성 추가
+    @Dependency(\.kakaoGeocodingClient) var geocodingClient
 
     @ObservableState
     public struct State: Equatable {
         public var isLoading = false
         public var isTimerRunning = false
-
         public var imageURL: String = ""
         public var name: String = ""
         public var category: HomeRestaurantCategory = .korean // 기본값 설정 필요
@@ -53,6 +53,8 @@ public struct RegisterRestaurantFeature: Equatable {
         case closedDaysChanged(String)
         case saveButtonTapped
         case saveFailed(Error)
+        case validateAdress(String)
+        case validateAdressResponse(TaskResult<GeocodingResponse>)
     }
     
     public init() {}
@@ -126,7 +128,9 @@ public struct RegisterRestaurantFeature: Equatable {
                         address: state.address,
                         businessHours: state.businessHours,
                         closedDays: state.closedDays,
-                        corkageNote: state.corkageNote
+                        corkageNote: state.corkageNote,
+                        latitude: 0,
+                        longitude: 0
                     )
                     
                     do {
@@ -141,6 +145,24 @@ public struct RegisterRestaurantFeature: Equatable {
                 print("세이브실패 : \(error)")
                 return .none
                 
+            case let .validateAdress(address):
+                state.isLoading = true
+                return .run { [geocodingClient] send in
+                    await send(.validateAdressResponse(
+                        TaskResult {
+                            try await geocodingClient.fetchAddressInfo(address)
+                        }
+                    ))
+                }
+                
+            case let .validateAdressResponse(.success(geocodingResponse)):
+                print("지오코딩 결과: \(geocodingResponse)")
+                return .none
+                
+            case let .validateAdressResponse(.failure(error)):
+                print("지오코딩 실패: \(error)")
+                return .none
+
             }
         }
     }

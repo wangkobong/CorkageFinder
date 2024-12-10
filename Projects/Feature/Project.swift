@@ -20,7 +20,8 @@ let project = Project(
             settings: .settings(
                 base: [
                     "ENABLE_PREVIEWS": "YES",
-                    "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey)
+                    "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey),
+                    "KAKAO_API_KEY": .string(SecretConfig.Keys.kakaoAPIKey),
                 ]
             )
         ),

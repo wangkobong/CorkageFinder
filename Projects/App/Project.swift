@@ -12,7 +12,8 @@ let project = Project(
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchStoryboardName": "LaunchScreen.storyboard",
-                    "KAKAO_APP_KEY": "$(KAKAO_APP_KEY)"
+                    "KAKAO_APP_KEY": "$(KAKAO_APP_KEY)",
+                    "KAKAO_API_KEY": "$(KAKAO_API_KEY)",
                 ]
             ),
             sources: ["Sources/**"],
@@ -31,6 +32,7 @@ let project = Project(
             settings: .settings(
                 base: [
                     "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey),
+                    "KAKAO_API_KEY": .string(SecretConfig.Keys.kakaoAPIKey),
                     "OTHER_LDFLAGS": ["-ObjC"]
                 ]
             )
