@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Models
 
 struct RestaurantCardView: View {
     let restaurant: RestaurantCard

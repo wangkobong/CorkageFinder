@@ -10,5 +10,5 @@ import Foundation
 import Foundation
 
 public struct Restaurants: Codable, Equatable {
-    let restaurants: [RestaurantCard]
+    public let restaurants: [RestaurantCard]
 }

@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Models
 
 @Reducer
 public struct CorkageListFeature: Equatable {

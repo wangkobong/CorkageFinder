@@ -15,7 +15,7 @@ public enum HomeRestaurantCategory: String, Codable, CaseIterable {
     case asian     // 아시안
     case etc       // 기타
     
-    var title: String {
+    public var title: String {
         switch self {
         case .korean: return "한식"
         case .japanese: return "일식"

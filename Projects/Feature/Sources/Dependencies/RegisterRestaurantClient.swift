@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import FirebaseModule
+import Models
 
 public struct RegisterRestaurantClient {
    var test: () async throws -> Restaurants

@@ -8,6 +8,6 @@
 import Foundation
 
 public struct HomeData: Codable, Equatable {
-    let recommenderRestaurants: [RestaurantCard]
-    let corkageFreerestaurants: [RestaurantCard]
+    public let recommenderRestaurants: [RestaurantCard]
+    public let corkageFreerestaurants: [RestaurantCard]
 }

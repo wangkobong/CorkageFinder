@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Models
 
 public struct RegisterRestaurantView: View {
     @Bindable var store: StoreOf<RegisterRestaurantFeature>

@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import Models
 
 public struct RestaurantListClient {
     var fetch: () async throws -> Restaurants

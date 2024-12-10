@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Models
 
 struct RestaurantRowView: View {
     let restaurant: RestaurantCard

@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseCore
 import FirebaseFirestore
+import Models
 
 public struct FirebaseClient {
     public var configure: () -> Void
@@ -47,15 +48,40 @@ public struct FirebaseClient {
         addDocument: { data in
             
             try Self.ensureFirebaseInitialized()  // 초기화 상태 체크
+            let db = Firestore.firestore()
 
-//            do {
-//                let db = Firestore.firestore()
-//                let ref = try await db.collection("users").addDocument(data: data)
-//                print("Document added with ID: \(ref.documentID)")
-//                return ref.documentID
-//            } catch {
-//                throw error
-//            }
+            let restaurant = RestaurantCard(imageURL: "",
+                                      name: "이자카야 료",
+                                      category: .japanese,
+                                      isCorkageFree: true,
+                                      corkageFee: "무료",
+                                      sido: "경기도",
+                                      sigungu: "분당구",
+                                      phoneNumber: "031-712-5678",
+                                      address: "경기도 성남시 분당구 수내동 012-34",
+                                      businessHours: "17:00 - 23:30",
+                                      closedDays: "매주 월요일",
+                                      corkageNote: "콜키지 무료, 일본 사케 반입 가능")
+
+            do {
+                let ref = try await db.collection("restaurants").addDocument(data: [
+                    "imageURL": restaurant.imageURL,
+                    "name": restaurant.name,
+                    "category": restaurant.category.rawValue,  // enum은 rawValue로 저장
+                    "isCorkageFree": restaurant.isCorkageFree,
+                    "corkageFee": restaurant.corkageFee,
+                    "sido": restaurant.sido,
+                    "sigungu": restaurant.sigungu,
+                    "phoneNumber": restaurant.phoneNumber,
+                    "address": restaurant.address,
+                    "businessHours": restaurant.businessHours,
+                    "closedDays": restaurant.closedDays,
+                    "corkageNote": restaurant.corkageNote
+                ])
+                print("Restaurant added with ID: \(ref.documentID)")
+            } catch {
+                print("Error adding restaurant: \(error)")
+            }            
             return ""
         },
         getDocument: {
