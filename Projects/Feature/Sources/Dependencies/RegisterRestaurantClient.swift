@@ -29,7 +29,7 @@ public struct RegisterRestaurantClient {
             //           try await Task.sleep(nanoseconds: 1_000_000_000)  // 1초 딜레이
             //           try await FirebaseClient.live.addDocument(["테스트":1])
             //           try await FirebaseClient.live.getDocument()
-            try await FirebaseClient.live.addDocument(["":""])
+            try await FirebaseClient.live.addRestaurants(restaurant)
             return true
         }
     )

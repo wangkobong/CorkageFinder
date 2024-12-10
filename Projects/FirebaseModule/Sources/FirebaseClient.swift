@@ -12,7 +12,7 @@ import Models
 
 public struct FirebaseClient {
     public var configure: () -> Void
-    public var addDocument: ([String: Any]) async throws -> String
+    public var addRestaurants: (RestaurantCard) async throws -> String
     public var getDocument: () async throws -> Void
     
     // 초기화 상태 체크 함수 추가
@@ -45,26 +45,27 @@ public struct FirebaseClient {
                 FirebaseApp.configure()
             }
         },
-        addDocument: { data in
+        addRestaurants: { data in
             
             try Self.ensureFirebaseInitialized()  // 초기화 상태 체크
             let db = Firestore.firestore()
 
-            let restaurant = RestaurantCard.preview
             do {
                 let ref = try await db.collection("restaurants").addDocument(data: [
-                    "imageURL": restaurant.imageURL,
-                    "name": restaurant.name,
-                    "category": restaurant.category.rawValue,  // enum은 rawValue로 저장
-                    "isCorkageFree": restaurant.isCorkageFree,
-                    "corkageFee": restaurant.corkageFee,
-                    "sido": restaurant.sido,
-                    "sigungu": restaurant.sigungu,
-                    "phoneNumber": restaurant.phoneNumber,
-                    "address": restaurant.address,
-                    "businessHours": restaurant.businessHours,
-                    "closedDays": restaurant.closedDays,
-                    "corkageNote": restaurant.corkageNote
+                    "imageURL": data.imageURL,
+                    "name": data.name,
+                    "category": data.category.rawValue,  // enum은 rawValue로 저장
+                    "isCorkageFree": data.isCorkageFree,
+                    "corkageFee": data.corkageFee,
+                    "sido": data.sido,
+                    "sigungu": data.sigungu,
+                    "phoneNumber": data.phoneNumber,
+                    "address": data.address,
+                    "businessHours": data.businessHours,
+                    "closedDays": data.closedDays,
+                    "corkageNote": data.corkageNote,
+                    "latitude": data.latitude ?? 0.0,
+                    "longitude": data.longitude ?? 0.0
                 ])
                 print("Restaurant added with ID: \(ref.documentID)")
             } catch {
@@ -88,7 +89,7 @@ public struct FirebaseClient {
     
     public static let mock = Self(
         configure: { },
-        addDocument: { _ in return "mock-document-id" },
+        addRestaurants: { _ in return "mock-document-id" },
         getDocument: { }
     )
 }

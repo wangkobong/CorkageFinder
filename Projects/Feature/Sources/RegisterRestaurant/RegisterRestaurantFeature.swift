@@ -34,7 +34,22 @@ public struct RegisterRestaurantFeature: Equatable {
         public var businessHours: String = ""
         public var closedDays: String = ""
         public var corkageNote: String = ""
+        public var validateAddress: String = ""
+        public var latitude: String = ""
+        public var longitude: String = ""
         
+        var isSubmitButtonEnabled: Bool {
+            !name.isEmpty &&
+            !phoneNumber.isEmpty &&
+            !businessHours.isEmpty &&
+            !closedDays.isEmpty &&
+            isLocationValid
+        }
+        
+        var isLocationValid: Bool {
+            !validateAddress.isEmpty && validateAddress != "정확한 주소를 입력해주세요."  && !latitude.isEmpty && !longitude.isEmpty
+        }
+
         public init() {}
     }
     
@@ -129,8 +144,8 @@ public struct RegisterRestaurantFeature: Equatable {
                         businessHours: state.businessHours,
                         closedDays: state.closedDays,
                         corkageNote: state.corkageNote,
-                        latitude: 0,
-                        longitude: 0
+                        latitude: Double(state.latitude) ?? 0.0,
+                        longitude: Double(state.longitude) ?? 0.0
                     )
                     
                     do {
@@ -156,7 +171,18 @@ public struct RegisterRestaurantFeature: Equatable {
                 }
                 
             case let .validateAdressResponse(.success(geocodingResponse)):
-                print("지오코딩 결과: \(geocodingResponse)")
+                if geocodingResponse.documents.count == 1 {
+                    print("지오코딩 성공")
+                    print("\(geocodingResponse.documents[0].address)")
+                    let data = geocodingResponse.documents[0].address
+                    state.sido = data.region1depthName
+                    state.sigungu = data.region2depthName
+                    state.validateAddress = geocodingResponse.documents[0].addressName
+                    state.latitude = data.y
+                    state.longitude = data.x
+                } else {
+                    state.validateAddress = "정확한 주소를 입력해주세요."
+                }
                 return .none
                 
             case let .validateAdressResponse(.failure(error)):

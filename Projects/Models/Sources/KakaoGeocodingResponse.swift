@@ -1,16 +1,16 @@
 import Foundation
 
 public struct GeocodingResponse: Codable {
-    let documents: [Document]
-    let meta: Meta
+    public let documents: [Document]
+    public let meta: Meta
     
     public struct Document: Codable {
-        let address: Address
-        let addressName: String
-        let addressType: String
-        let roadAddress: RoadAddress
-        let x: String
-        let y: String
+        public let address: Address
+        public let addressName: String
+        public let addressType: String
+        public let roadAddress: RoadAddress?
+        public let x: String
+        public let y: String
         
         enum CodingKeys: String, CodingKey {
             case address
@@ -22,18 +22,18 @@ public struct GeocodingResponse: Codable {
     }
     
     public struct Address: Codable {
-        let addressName: String
-        let bCode: String
-        let hCode: String
-        let mainAddressNo: String
-        let mountainYn: String
-        let region1depthName: String
-        let region2depthName: String
-        let region3depthHName: String
-        let region3depthName: String
-        let subAddressNo: String
-        let x: String
-        let y: String
+        public let addressName: String
+        public let bCode: String
+        public let hCode: String
+        public let mainAddressNo: String
+        public let mountainYn: String
+        public let region1depthName: String
+        public let region2depthName: String
+        public let region3depthHName: String
+        public let region3depthName: String
+        public let subAddressNo: String
+        public let x: String
+        public let y: String
         
         enum CodingKeys: String, CodingKey {
             case addressName = "address_name"
@@ -51,18 +51,18 @@ public struct GeocodingResponse: Codable {
     }
     
     public struct RoadAddress: Codable {
-        let addressName: String
-        let buildingName: String
-        let mainBuildingNo: String
-        let region1depthName: String
-        let region2depthName: String
-        let region3depthName: String
-        let roadName: String
-        let subBuildingNo: String
-        let undergroundYn: String
-        let x: String
-        let y: String
-        let zoneNo: String
+        public let addressName: String
+        public let buildingName: String
+        public let mainBuildingNo: String
+        public let region1depthName: String
+        public let region2depthName: String
+        public let region3depthName: String
+        public  let roadName: String
+        public let subBuildingNo: String
+        public let undergroundYn: String
+        public let x: String
+        public let y: String
+        public let zoneNo: String
         
         enum CodingKeys: String, CodingKey {
             case addressName = "address_name"
@@ -80,9 +80,9 @@ public struct GeocodingResponse: Codable {
     }
     
     public struct Meta: Codable {
-        let isEnd: Bool
-        let pageableCount: Int
-        let totalCount: Int
+        public let isEnd: Bool
+        public let pageableCount: Int
+        public let totalCount: Int
         
         enum CodingKeys: String, CodingKey {
             case isEnd = "is_end"
