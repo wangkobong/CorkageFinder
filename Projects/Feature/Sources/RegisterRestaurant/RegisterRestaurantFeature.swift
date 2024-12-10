@@ -20,6 +20,7 @@ public struct RegisterRestaurantFeature: Equatable {
 
     @ObservableState
     public struct State: Equatable {
+        
         public var isLoading = false
         public var isTimerRunning = false
         public var imageURL: String = ""
@@ -68,6 +69,7 @@ public struct RegisterRestaurantFeature: Equatable {
         case closedDaysChanged(String)
         case saveButtonTapped
         case saveFailed(Error)
+        case saveSucceeded
         case validateAdress(String)
         case validateAdressResponse(TaskResult<GeocodingResponse>)
     }
@@ -149,8 +151,8 @@ public struct RegisterRestaurantFeature: Equatable {
                     )
                     
                     do {
-                        try await registerRestaurantClient.saveRestaurant(restaurant)
-                        await print("완료")
+                        let success = try await registerRestaurantClient.saveRestaurant(restaurant)
+                        await send(success ? .saveSucceeded : .saveFailed(HTTPError.invalidResponse))
                     } catch {
                         await send(.saveFailed(error))
                     }
@@ -160,6 +162,25 @@ public struct RegisterRestaurantFeature: Equatable {
                 print("세이브실패 : \(error)")
                 return .none
                 
+            case .saveSucceeded:
+                print("식당 저장 성공")
+                state.isLoading = false
+                state.imageURL = ""
+                state.name = ""
+                state.category = .korean
+                state.isCorkageFree = false
+                state.corkageFee = ""
+                state.sido = ""
+                state.sigungu = ""
+                state.phoneNumber = ""
+                state.address = ""
+                state.businessHours = ""
+                state.closedDays = ""
+                state.corkageNote = ""
+                state.validateAddress = ""
+                state.latitude = ""
+                state.longitude = ""
+                return .none
             case let .validateAdress(address):
                 state.isLoading = true
                 return .run { [geocodingClient] send in
