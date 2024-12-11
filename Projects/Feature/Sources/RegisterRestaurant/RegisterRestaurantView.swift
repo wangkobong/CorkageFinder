@@ -83,12 +83,8 @@ public struct RegisterRestaurantView: View {
 
             }
             .navigationTitle("레스토랑 정보 입력")
-            .alert(
-                store: store.scope(
-                    state: \.$alert,
-                    action: { .alert($0) }
-                )
-            )
+            .alert($store.scope(state: \.alert, action: \.alert))
+
         }
     }
 }

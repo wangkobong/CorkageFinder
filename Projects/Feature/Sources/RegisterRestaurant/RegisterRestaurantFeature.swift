@@ -17,9 +17,11 @@ public struct RegisterRestaurantFeature: Equatable {
     
     @Dependency(\.registerRestaurantClient) var registerRestaurantClient  // 저장 API 클라이언트 의존성 추가
     @Dependency(\.kakaoGeocodingClient) var geocodingClient
-
+    
     @ObservableState
     public struct State: Equatable {
+        
+        @Presents var alert: AlertState<Action.Alert>?
         
         public var isLoading = false
         public var isTimerRunning = false
@@ -50,7 +52,7 @@ public struct RegisterRestaurantFeature: Equatable {
         var isLocationValid: Bool {
             !validateAddress.isEmpty && validateAddress != "정확한 주소를 입력해주세요."  && !latitude.isEmpty && !longitude.isEmpty
         }
-
+        
         public init() {}
     }
     
@@ -69,9 +71,14 @@ public struct RegisterRestaurantFeature: Equatable {
         case closedDaysChanged(String)
         case saveButtonTapped
         case saveFailed(Error)
-        case saveSucceeded
         case validateAdress(String)
         case validateAdressResponse(TaskResult<GeocodingResponse>)
+        case alert(PresentationAction<Alert>)
+
+        public enum Alert: Equatable {
+            case completeSave
+            case saveConfirmed
+        }
     }
     
     public init() {}
@@ -152,7 +159,7 @@ public struct RegisterRestaurantFeature: Equatable {
                     
                     do {
                         let success = try await registerRestaurantClient.saveRestaurant(restaurant)
-                        await send(success ? .saveSucceeded : .saveFailed(HTTPError.invalidResponse))
+                        await send(success ? .alert(.presented(.completeSave)) : .saveFailed(HTTPError.invalidResponse))
                     } catch {
                         await send(.saveFailed(error))
                     }
@@ -162,25 +169,6 @@ public struct RegisterRestaurantFeature: Equatable {
                 print("세이브실패 : \(error)")
                 return .none
                 
-            case .saveSucceeded:
-                print("식당 저장 성공")
-                state.isLoading = false
-                state.imageURL = ""
-                state.name = ""
-                state.category = .korean
-                state.isCorkageFree = false
-                state.corkageFee = ""
-                state.sido = ""
-                state.sigungu = ""
-                state.phoneNumber = ""
-                state.address = ""
-                state.businessHours = ""
-                state.closedDays = ""
-                state.corkageNote = ""
-                state.validateAddress = ""
-                state.latitude = ""
-                state.longitude = ""
-                return .none
             case let .validateAdress(address):
                 state.isLoading = true
                 return .run { [geocodingClient] send in
@@ -190,7 +178,6 @@ public struct RegisterRestaurantFeature: Equatable {
                         }
                     ))
                 }
-                
             case let .validateAdressResponse(.success(geocodingResponse)):
                 if geocodingResponse.documents.count == 1 {
                     print("지오코딩 성공")
@@ -201,6 +188,7 @@ public struct RegisterRestaurantFeature: Equatable {
                     state.validateAddress = geocodingResponse.documents[0].addressName
                     state.latitude = data.y
                     state.longitude = data.x
+                    return .none
                 } else {
                     state.validateAddress = "정확한 주소를 입력해주세요."
                 }
@@ -209,8 +197,46 @@ public struct RegisterRestaurantFeature: Equatable {
             case let .validateAdressResponse(.failure(error)):
                 print("지오코딩 실패: \(error)")
                 return .none
-
+                
+            case let .alert(.presented(alertAction)):
+                
+                switch alertAction {
+                case .completeSave:
+                    state.alert = AlertState {
+                        TextState("등록 신청 완료")
+                    } actions: {
+                        ButtonState(role: .cancel, action: .saveConfirmed) {
+                            TextState("확인")
+                        }
+                    }
+                    return .none
+                    
+                case .saveConfirmed:
+                    print("식당 저장 성공")
+                    state.isLoading = false
+                    state.imageURL = ""
+                    state.name = ""
+                    state.category = .korean
+                    state.isCorkageFree = false
+                    state.corkageFee = ""
+                    state.sido = ""
+                    state.sigungu = ""
+                    state.phoneNumber = ""
+                    state.address = ""
+                    state.businessHours = ""
+                    state.closedDays = ""
+                    state.corkageNote = ""
+                    state.validateAddress = ""
+                    state.latitude = ""
+                    state.longitude = ""
+                    return .none
+                }
+                
+            case .alert:
+                if state.alert == nil { return .none }
+                return .none
             }
         }
+        .ifLet(\.$alert, action: \.alert)
     }
 }
