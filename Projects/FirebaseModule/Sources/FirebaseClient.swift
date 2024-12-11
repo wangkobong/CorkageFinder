@@ -14,6 +14,7 @@ public struct FirebaseClient {
     public var configure: () -> Void
     public var addRestaurants: (RestaurantCard) async throws -> String
     public var getDocument: () async throws -> Void
+    public var getApprovedRestaurants: () async throws -> Restaurants
     
     // 초기화 상태 체크 함수 추가
     private static func ensureFirebaseInitialized() throws {
@@ -51,7 +52,7 @@ public struct FirebaseClient {
             let db = Firestore.firestore()
 
             do {
-                let ref = try await db.collection("restaurants").addDocument(data: [
+                let ref = try await db.collection("approved").addDocument(data: [
                     "imageURL": data.imageURL,
                     "name": data.name,
                     "category": data.category.rawValue,  // enum은 rawValue로 저장
@@ -84,12 +85,61 @@ public struct FirebaseClient {
             } catch {
                 print("Error getting documents: \(error)")
             }
+        },
+        getApprovedRestaurants: {
+            try await Self.ensureFirebaseInitialized()
+            let db = Firestore.firestore()
+            
+            let snapshot = try await db.collection("approved").getDocuments()
+            
+            let restaurantCards = try snapshot.documents.map { document in
+                let data = document.data()
+                
+                return RestaurantCard(
+                    imageURL: data["imageURL"] as? String ?? "",
+                    name: data["name"] as? String ?? "",
+                    category: HomeRestaurantCategory(rawValue: data["category"] as? String ?? "") ?? .korean,
+                    isCorkageFree: data["isCorkageFree"] as? Bool ?? false,
+                    corkageFee: data["corkageFee"] as? String ?? "",
+                    sido: data["sido"] as? String ?? "",
+                    sigungu: data["sigungu"] as? String ?? "",
+                    phoneNumber: data["phoneNumber"] as? String ?? "",
+                    address: data["address"] as? String ?? "",
+                    businessHours: data["businessHours"] as? String ?? "",
+                    closedDays: data["closedDays"] as? String ?? "",
+                    corkageNote: data["corkageNote"] as? String ?? "",
+                    latitude: data["latitude"] as? Double ?? 0.0,
+                    longitude: data["longitude"] as? Double ?? 0.0
+                )
+            }
+            
+            return Restaurants(restaurants: restaurantCards)
         }
     )
     
     public static let mock = Self(
         configure: { },
         addRestaurants: { _ in return "mock-document-id" },
-        getDocument: { }
+        getDocument: { },
+        getApprovedRestaurants: {
+            return Restaurants(restaurants: [
+                RestaurantCard(
+                    imageURL: "mock-image-url",
+                    name: "모크 레스토랑",
+                    category: .korean,
+                    isCorkageFree: true,
+                    corkageFee: "30,000원",
+                    sido: "서울",
+                    sigungu: "강남구",
+                    phoneNumber: "02-1234-5678",
+                    address: "서울시 강남구 테헤란로",
+                    businessHours: "11:00 - 22:00",
+                    closedDays: "월요일",
+                    corkageNote: "와인만 가능",
+                    latitude: 37.12345,
+                    longitude: 127.12345
+                )
+            ])
+        }
     )
 }
