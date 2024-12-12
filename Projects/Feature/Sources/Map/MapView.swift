@@ -14,19 +14,22 @@ public struct MapView: View {
     let store: StoreOf<MapFeature>
     
     @State var draw: Bool = false
+    var hasAppeared = false
     
     public init(store: StoreOf<MapFeature>) {
         self.store = store
     }                                                                                   
     public var body: some View {
-        KakaoMapView(draw: $draw).onAppear(perform: {
-            self.draw = true
-        }).onDisappear(perform: {
-            self.draw = false
-        })
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onAppear {
-            store.send(.fetchRestaurants)
+        NavigationStack {
+            KakaoMapView(draw: $draw, store: store).onAppear(perform: {
+                self.draw = true
+                if !hasAppeared {
+                    store.send(.fetchRestaurants)
+                }
+            }).onDisappear(perform: {
+                self.draw = false
+            })
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
         

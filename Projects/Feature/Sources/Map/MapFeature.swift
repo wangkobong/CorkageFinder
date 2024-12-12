@@ -21,7 +21,7 @@ public struct MapFeature: Equatable {
     public struct State: Equatable {
         public var isLoading = false
         public var isTimerRunning = false
-
+        public var allRestaurants: [RestaurantCard] = []
         
         public init() {}
     }
@@ -30,6 +30,7 @@ public struct MapFeature: Equatable {
         case map
         case fetchRestaurants
         case fetchRestaurantsResponse(TaskResult<Restaurants>)
+        case addRestaurantPOIs
     }
     
     public init() {}
@@ -50,13 +51,17 @@ public struct MapFeature: Equatable {
                     ))
                 }
                 
-            case let .fetchRestaurantsResponse(.success(restaurans)):
-                print("긁어온 식당들: \(restaurans)")
-                return .none
+            case let .fetchRestaurantsResponse(.success(response)):
+                state.allRestaurants = response.restaurants
+                return .send(.addRestaurantPOIs)
                 
             case let .fetchRestaurantsResponse(.failure(error)):
                 
                 print("페치 실패: \(error)")
+                return .none
+                
+            case .addRestaurantPOIs:
+                
                 return .none
             }
         }
