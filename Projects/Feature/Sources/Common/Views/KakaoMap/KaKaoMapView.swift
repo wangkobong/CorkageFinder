@@ -87,7 +87,7 @@ struct KakaoMapView: UIViewRepresentable {
         
         func addViews() {
             let defaultPosition: MapPoint = MapPoint(longitude: 126.978365, latitude: 37.566691)
-            let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition)
+            let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition, defaultLevel: 10)
             
             controller?.addView(mapviewInfo)
         }
@@ -198,8 +198,8 @@ struct KakaoMapView: UIViewRepresentable {
                         
             // POI 생성
             if let layer = manager?.getLodLabelLayer(layerID: "restaurants") {
-                var poiOptions: [PoiOptions] = []
-                var positions: [MapPoint] = []
+//                var poiOptions: [PoiOptions] = []
+//                var positions: [MapPoint] = []
                 
                 for (index, restaurant) in restaurants.enumerated() {
                     let options = PoiOptions(styleID: restaurant.category.title)
@@ -208,17 +208,31 @@ struct KakaoMapView: UIViewRepresentable {
                     options.clickable = true
                     options.addText(PoiText(text: restaurant.name, styleIndex: 0))
                     
-                    poiOptions.append(options)
-                    positions.append(MapPoint(
+                    
+//                    poiOptions.append(options)
+//                    positions.append(MapPoint(
+//                        longitude: restaurant.longitude ?? 0.0,
+//                        latitude: restaurant.latitude ?? 0.0
+//                    ))
+                    
+                    let poi1 = layer.addLodPoi(option: options, at: MapPoint(
                         longitude: restaurant.longitude ?? 0.0,
                         latitude: restaurant.latitude ?? 0.0
                     ))
                     
+                    poi1?.userObject = restaurant as AnyObject
+                    _ = poi1?.addPoiTappedEventHandler(target: self, handler: KakaoMapCoordinator.test(_:))
                 }
                 
-                let _ = layer.addLodPois(options: poiOptions, at: positions)
                 layer.showAllLodPois()
             }
+            
+        }
+        
+        func test(_ param: PoiInteractionEventParam) {
+            print("param: \(param.poiItem)")
+            print("param: \(param.poiItem.userObject)")
+            
         }
         
     }
