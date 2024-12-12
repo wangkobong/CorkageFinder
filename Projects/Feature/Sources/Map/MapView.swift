@@ -21,15 +21,20 @@ public struct MapView: View {
     }                                                                                   
     public var body: some View {
         NavigationStack {
-            KakaoMapView(draw: $draw, store: store).onAppear(perform: {
-                self.draw = true
-                if !hasAppeared {
-                    store.send(.fetchRestaurants)
-                }
-            }).onDisappear(perform: {
-                self.draw = false
-            })
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            ZStack {
+                KakaoMapView(draw: $draw, store: store).onAppear(perform: {
+                    self.draw = true
+                    if !hasAppeared {
+                        store.send(.fetchRestaurants)
+                    }
+                }).onDisappear(perform: {
+                    self.draw = false
+                })
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                
+            }
+
         }
     }
         

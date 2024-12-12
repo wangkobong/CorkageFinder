@@ -76,6 +76,7 @@ struct KakaoMapView: UIViewRepresentable {
                          self?.createRestaurantPois(restaurants: restaurants)
                      }
                  }
+
          }
         
         func createController(_ view: KMViewContainer) {
@@ -130,37 +131,78 @@ struct KakaoMapView: UIViewRepresentable {
                 radius: 20.0
             )
             let _ = manager?.addLodLabelLayer(option: restaurantLayer)
-            
-            // POI 스타일 생성
-            let restaurantSymbol = UIImage(named: "restaurant_pin") // 적절한 이미지로 변경 필요
+        
             let anchorPoint = CGPoint(x: 0.5, y: 1.0)
-            
             let textLineStyles = [
                 PoiTextLineStyle(
                     textStyle: TextStyle(
-                        fontSize: 15,
-                        fontColor: UIColor.black,
+                        fontSize: 30,
+                        fontColor: UIColor.red,
                         strokeThickness: 2,
                         strokeColor: UIColor.white
                     )
                 )
             ]
             
-            let iconStyle = PoiIconStyle(symbol: restaurantSymbol, anchorPoint: anchorPoint)
             let textStyle = PoiTextStyle(textLineStyles: textLineStyles)
-            let poiStyle = PoiStyle(
-                styleID: "restaurantStyle",
-                styles: [PerLevelPoiStyle(iconStyle: iconStyle, textStyle: textStyle, level: 0)]
-            )
-            manager?.addPoiStyle(poiStyle)
+
             
+            let koreanIconStyle = PoiIconStyle(symbol: UIImage(systemName: "star.fill"), anchorPoint: anchorPoint)
+            let japaneseIconStyle = PoiIconStyle(symbol: UIImage(systemName: "pencil"), anchorPoint: anchorPoint)
+            let chineseIconStyle = PoiIconStyle(symbol: UIImage(systemName: "folder"), anchorPoint: anchorPoint)
+            let westernIconStyle = PoiIconStyle(symbol: UIImage(systemName: "soccerball"), anchorPoint: anchorPoint)
+            let asianIconStyle = PoiIconStyle(symbol: UIImage(systemName: "basketball.fill"), anchorPoint: anchorPoint)
+            let etcIconStyle = PoiIconStyle(symbol: UIImage(systemName: "star"), anchorPoint: anchorPoint)
+            
+            
+            let koreanPoiStyle = PoiStyle(
+                styleID: "한식",
+                styles: [PerLevelPoiStyle(iconStyle: koreanIconStyle, textStyle: textStyle, level: 0)]
+            )
+            
+            let chinesePoiStyle = PoiStyle(
+                styleID: "중식",
+                styles: [PerLevelPoiStyle(iconStyle: chineseIconStyle, textStyle: textStyle, level: 0)]
+            )
+            
+            let japanesePoiStyle = PoiStyle(
+                styleID: "일식",
+                styles: [PerLevelPoiStyle(iconStyle: japaneseIconStyle, textStyle: textStyle, level: 0)]
+            )
+            
+            let westernPoiStyle = PoiStyle(
+                styleID: "양식",
+                styles: [PerLevelPoiStyle(iconStyle: westernIconStyle, textStyle: textStyle, level: 0)]
+            )
+            
+            let asianPoiStyle = PoiStyle(
+                styleID: "아시안",
+                styles: [PerLevelPoiStyle(iconStyle: asianIconStyle, textStyle: textStyle, level: 0)]
+            )
+            
+            let etcPoiStyle = PoiStyle(
+                styleID: "기타",
+                styles: [PerLevelPoiStyle(iconStyle: etcIconStyle, textStyle: textStyle, level: 0)]
+            )
+            
+            let styles = [
+                koreanPoiStyle,
+                japanesePoiStyle,
+                chinesePoiStyle,
+                westernPoiStyle,
+                asianPoiStyle,
+                etcPoiStyle
+            ]
+            
+            styles.forEach { manager?.addPoiStyle($0) }
+                        
             // POI 생성
             if let layer = manager?.getLodLabelLayer(layerID: "restaurants") {
                 var poiOptions: [PoiOptions] = []
                 var positions: [MapPoint] = []
                 
                 for (index, restaurant) in restaurants.enumerated() {
-                    let options = PoiOptions(styleID: "restaurantStyle")
+                    let options = PoiOptions(styleID: restaurant.category.title)
                     options.rank = index
                     options.transformType = .decal
                     options.clickable = true
@@ -171,6 +213,7 @@ struct KakaoMapView: UIViewRepresentable {
                         longitude: restaurant.longitude ?? 0.0,
                         latitude: restaurant.latitude ?? 0.0
                     ))
+                    
                 }
                 
                 let _ = layer.addLodPois(options: poiOptions, at: positions)
@@ -178,57 +221,6 @@ struct KakaoMapView: UIViewRepresentable {
             }
         }
         
-        func createLodPois() {
-            let view = controller?.getView("mapview") as? KakaoMap
-            let manager = view?.getLabelManager()
-            
-            for index in 0 ... (_layerNames.count - 1) {
-                let layer = manager?.getLodLabelLayer(layerID: _layerNames[index])
-                let datas = testLodDatas(layerIndex: index)
-                let _ = layer?.addLodPois(options: datas.0, at: datas.1)    // 대량의 POI를 add할때는 개별로 add하기 보다는 addPois를 사용하는 것이 효율적이다.
-                layer?.showAllLodPois()
-            }
-        }
-        
-        func testLodDatas(layerIndex: Int) -> ([PoiOptions], [MapPoint]) {
-            var datas = [PoiOptions]()
-            var positions = [MapPoint]()
-            
-            var coords = [MapPoint]()
-            var boundary = [GeoCoordinate]()
-            
-            coords.append(MapPoint(longitude: 126.627459, latitude: 35.129776))
-            coords.append(MapPoint(longitude: 126.875658, latitude: 37.492889))
-            coords.append(MapPoint(longitude: 128.774832, latitude: 35.126031))
-            
-            boundary.append(GeoCoordinate(longitude: 2.694945, latitude: 3.590908))
-            boundary.append(GeoCoordinate(longitude: 0.269494, latitude: 0.179662))
-            boundary.append(GeoCoordinate(longitude: 0.359326, latitude: 0.628808))
-            
-            for index in 1 ... 1000 {
-                let options = PoiOptions(styleID: "customStyle" + String(layerIndex))
-                options.rank = index              
-                let coord = coords[layerIndex].wgsCoord
-                
-                options.transformType = .decal
-                options.clickable = true
-                options.addText(PoiText(text: _layerNames[layerIndex], styleIndex: 0))
-                options.addText(PoiText(text: String(index), styleIndex: 1))
-                
-                datas.append(options)
-                positions.append(MapPoint(longitude: coord.longitude + Double.random(in: 0...boundary[layerIndex].longitude),
-                                          latitude: coord.latitude + Double.random(in: 0...boundary[layerIndex].latitude)))
-            }
-            
-            return (datas, positions)
-        }
-        
-//        override func containerDidResized(_ size: CGSize) {
-//            let mapView: KakaoMap? = mapController?.getView("mapview") as? KakaoMap
-//            mapView?.viewRect = CGRect(origin: CGPoint(x: 0.0, y: 0.0), size: size)
-//        }
-        
-        let _layerNames: [String] = ["korea", "seoul", "busan"]
     }
 }
 
