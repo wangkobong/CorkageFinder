@@ -56,8 +56,9 @@ struct KakaoMapView: UIViewRepresentable {
     }
     
     class KakaoMapCoordinator: NSObject, MapControllerDelegate {
-        
+        private var store: StoreOf<MapFeature>?
         private var storeSubscription: AnyCancellable?
+        private let authenticationSubject = PassthroughSubject<Void, Never>()
 
         override init() {
             first = true
@@ -67,16 +68,17 @@ struct KakaoMapView: UIViewRepresentable {
         
         // store 업데이트 메서드 추가
          func updateStore(_ store: StoreOf<MapFeature>) {
+             self.store = store
              storeSubscription?.cancel()
              storeSubscription = store.publisher
                  .map(\.allRestaurants)
                  .removeDuplicates()
+                 .delay(for: .seconds(2), scheduler: DispatchQueue.main)
                  .sink { [weak self] restaurants in
                      if !restaurants.isEmpty {
                          self?.createRestaurantPois(restaurants: restaurants)
                      }
                  }
-
          }
         
         func createController(_ view: KMViewContainer) {
@@ -109,7 +111,12 @@ struct KakaoMapView: UIViewRepresentable {
         }
         
         func authenticationSucceeded() {
+            print("Authentication succeeded")
             auth = true
+            authenticationSubject.send()
+            let view = controller?.getView("mapview") as? KakaoMap
+            let manager = view?.getLabelManager()
+            print("매니저1: \(manager)")
         }
         
         var controller: KMController?
@@ -118,9 +125,11 @@ struct KakaoMapView: UIViewRepresentable {
         var auth: Bool
         
         func createRestaurantPois(restaurants: [RestaurantCard]) {
+            print("createRestaurantPois")
             let view = controller?.getView("mapview") as? KakaoMap
             let manager = view?.getLabelManager()
-            
+            print("매니저2: \(manager)")
+
             // 레이어가 없다면 생성
             let restaurantLayer = LodLabelLayerOptions(
                 layerID: "restaurants",
@@ -232,7 +241,8 @@ struct KakaoMapView: UIViewRepresentable {
         func test(_ param: PoiInteractionEventParam) {
             print("param: \(param.poiItem)")
             print("param: \(param.poiItem.userObject)")
-            
+            let resaurant = param.poiItem.userObject as? RestaurantCard
+            store?.send(.tapMarker(param.poiItem.isShow, resaurant!))
         }
         
     }

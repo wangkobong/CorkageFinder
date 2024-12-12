@@ -32,6 +32,13 @@ public struct MapView: View {
                 })
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
+                if store.state.clickedRestaurant != nil {
+                    VStack {
+                        Text(store.state.clickedRestaurant?.name ?? "")
+                        Text(store.state.clickedRestaurant?.phoneNumber ?? "")
+                        Text(store.state.clickedRestaurant?.sigungu ?? "")
+                    }
+                }
                 
             }
 

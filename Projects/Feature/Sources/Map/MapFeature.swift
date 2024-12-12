@@ -22,7 +22,8 @@ public struct MapFeature: Equatable {
         public var isLoading = false
         public var isTimerRunning = false
         public var allRestaurants: [RestaurantCard] = []
-        
+        public var isShowCard = false
+        public var clickedRestaurant: RestaurantCard?
         public init() {}
     }
     
@@ -31,6 +32,7 @@ public struct MapFeature: Equatable {
         case fetchRestaurants
         case fetchRestaurantsResponse(TaskResult<Restaurants>)
         case addRestaurantPOIs
+        case tapMarker(Bool, RestaurantCard)
     }
     
     public init() {}
@@ -62,6 +64,12 @@ public struct MapFeature: Equatable {
                 
             case .addRestaurantPOIs:
                 
+                return .none
+                
+            case let .tapMarker(isShowCard, restaurant):
+                state.isShowCard = true
+                state.clickedRestaurant = restaurant
+                print("restaurant: \(restaurant)")
                 return .none
             }
         }
