@@ -44,13 +44,14 @@ struct MapRestaurantCardView: View {
                                 .foregroundColor(.secondary)
                         }
                         
-                        HStack {
-                            Image(systemName: "hourglass")
-                                .foregroundColor(.gray)
-                            Text("15:30 ~ 17:00")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            
+                        if restaurant.isBreaktime {
+                            HStack {
+                                Image(systemName: "hourglass")
+                                    .foregroundColor(.gray)
+                                Text(restaurant.breaktime)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                         
                         Spacer()
@@ -93,7 +94,7 @@ struct MapRestaurantCardView: View {
                         Text("휴무일")
                             .font(.subheadline)
                             .foregroundColor(.red)
-                        Text(restaurant.closedDays)
+                        Text(restaurant.closedDays == "" ? "정보없음" : restaurant.closedDays)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         

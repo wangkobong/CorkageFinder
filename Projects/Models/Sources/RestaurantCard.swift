@@ -22,6 +22,8 @@ public struct RestaurantCard: Codable, Equatable {
     public let corkageNote: String
     public var latitude: Double?
     public var longitude: Double?
+    public var isBreaktime: Bool
+    public var breaktime: String
     
     public init(
         imageURL: String,
@@ -37,7 +39,9 @@ public struct RestaurantCard: Codable, Equatable {
         closedDays: String,
         corkageNote: String,
         latitude: Double,
-        longitude: Double
+        longitude: Double,
+        isBreaktime: Bool,
+        breaktime: String
     ) {
         self.imageURL = imageURL
         self.name = name
@@ -53,6 +57,8 @@ public struct RestaurantCard: Codable, Equatable {
         self.corkageNote = corkageNote
         self.latitude = latitude
         self.longitude = longitude
+        self.isBreaktime = isBreaktime
+        self.breaktime = breaktime
     }
 }
 
@@ -71,6 +77,8 @@ extension RestaurantCard {
            closedDays: "매주 월요일",
            corkageNote: "와인 한 병당 콜키지 30,000원",
            latitude: 37.4979,      // 추가 (예시 좌표)
-           longitude: 127.0276     // 추가 (예시 좌표)
+           longitude: 127.0276,     // 추가 (예시 좌표)
+           isBreaktime: true,
+           breaktime: "15:00 ~ 17:00"
        )
 }

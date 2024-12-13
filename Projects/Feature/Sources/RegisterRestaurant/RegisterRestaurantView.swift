@@ -68,6 +68,10 @@ public struct RegisterRestaurantView: View {
                     TextField("전화번호", text: $store.phoneNumber.sending(\.phoneNumberChanged))
                     TextField("영업시간", text: $store.businessHours.sending(\.businessHoursChanged))
                     TextField("휴무일", text: $store.closedDays.sending(\.closedDaysChanged))
+                    Toggle("브레이크타임", isOn: $store.isBreaktime.sending(\.isBreakTime))
+                    if store.isBreaktime {
+                        TextField("브레이크타임", text: $store.breaktime.sending(\.breaktime))
+                    }
                 }
                 
                 

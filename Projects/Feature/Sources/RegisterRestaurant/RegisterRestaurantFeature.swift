@@ -40,6 +40,8 @@ public struct RegisterRestaurantFeature: Equatable {
         public var validateAddress: String = ""
         public var latitude: String = ""
         public var longitude: String = ""
+        public var isBreaktime: Bool = false
+        public var breaktime: String = ""
         
         var isSubmitButtonEnabled: Bool {
             !name.isEmpty &&
@@ -74,6 +76,8 @@ public struct RegisterRestaurantFeature: Equatable {
         case validateAdress(String)
         case validateAdressResponse(TaskResult<GeocodingResponse>)
         case alert(PresentationAction<Alert>)
+        case isBreakTime(Bool)
+        case breaktime(String)
 
         public enum Alert: Equatable {
             case completeSave
@@ -135,6 +139,14 @@ public struct RegisterRestaurantFeature: Equatable {
                 state.closedDays = closedDays
                 return .none
                 
+            case let .isBreakTime(isBreaktime):
+                state.isBreaktime = isBreaktime
+                return .none
+                
+            case let .breaktime(breaktime):
+                state.breaktime = breaktime
+                return .none
+                
             case .saveButtonTapped:
                 state.isLoading = true  // 저장 중임을 표시
                 
@@ -154,7 +166,9 @@ public struct RegisterRestaurantFeature: Equatable {
                         closedDays: state.closedDays,
                         corkageNote: state.corkageNote,
                         latitude: Double(state.latitude) ?? 0.0,
-                        longitude: Double(state.longitude) ?? 0.0
+                        longitude: Double(state.longitude) ?? 0.0,
+                        isBreaktime: state.isBreaktime,
+                        breaktime: state.breaktime
                     )
                     
                     do {

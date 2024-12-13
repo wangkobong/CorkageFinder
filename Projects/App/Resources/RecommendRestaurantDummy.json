@@ -12,7 +12,9 @@
             "address": "서울특별시 강남구 신사동 123-45",
             "businessHours": "11:30 - 22:00",
             "closedDays": "매주 월요일",
-            "corkageNote": "와인 1병당 30,000원, 최대 2병까지 가능"
+            "corkageNote": "와인 1병당 30,000원, 최대 2병까지 가능",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant2.jpg",
@@ -26,7 +28,9 @@
             "address": "서울특별시 마포구 연남동 567-89",
             "businessHours": "17:00 - 23:00",
             "closedDays": "매주 일요일",
-            "corkageNote": "와인만 반입 가능, 병당 50,000원"
+            "corkageNote": "와인만 반입 가능, 병당 50,000원",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant3.jpg",
@@ -40,7 +44,9 @@
             "address": "서울특별시 서초구 서초동 234-56",
             "businessHours": "11:00 - 21:30",
             "closedDays": "연중무휴",
-            "corkageNote": "콜키지 무료, 와인잔 제공"
+            "corkageNote": "콜키지 무료, 와인잔 제공",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant4.jpg",
@@ -54,7 +60,9 @@
             "address": "서울특별시 용산구 이태원동 345-67",
             "businessHours": "12:00 - 22:00",
             "closedDays": "매주 화요일",
-            "corkageNote": "와인 1병당 40,000원, 최대 3병까지 가능"
+            "corkageNote": "와인 1병당 40,000원, 최대 3병까지 가능",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant5.jpg",
@@ -68,7 +76,9 @@
             "address": "서울특별시 송파구 잠실동 456-78",
             "businessHours": "11:30 - 21:30",
             "closedDays": "첫째 주 월요일",
-            "corkageNote": "주류 종류 무관, 병당 20,000원"
+            "corkageNote": "주류 종류 무관, 병당 20,000원",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant6.jpg",
@@ -82,7 +92,9 @@
             "address": "서울특별시 종로구 삼청동 567-89",
             "businessHours": "11:30 - 21:00",
             "closedDays": "매주 수요일",
-            "corkageNote": "와인, 위스키 가능, 병당 25,000원"
+            "corkageNote": "와인, 위스키 가능, 병당 25,000원",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant7.jpg",
@@ -96,7 +108,9 @@
             "address": "서울특별시 강서구 마곡동 678-90",
             "businessHours": "17:30 - 22:00",
             "closedDays": "매주 월요일",
-            "corkageNote": "콜키지 무료, 와인잔 대여 가능"
+            "corkageNote": "콜키지 무료, 와인잔 대여 가능",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant8.jpg",
@@ -110,7 +124,9 @@
             "address": "서울특별시 영등포구 여의도동 789-12",
             "businessHours": "11:30 - 22:30",
             "closedDays": "매주 일요일",
-            "corkageNote": "와인 1병당 35,000원, 디켄팅 서비스 제공"
+            "corkageNote": "와인 1병당 35,000원, 디켄팅 서비스 제공",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant9.jpg",
@@ -124,7 +140,9 @@
             "address": "경기도 성남시 분당구 정자동 890-12",
             "businessHours": "11:00 - 21:30",
             "closedDays": "연중무휴",
-            "corkageNote": "콜키지 무료, 주류 종류 무관"
+            "corkageNote": "콜키지 무료, 주류 종류 무관",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant10.jpg",
@@ -138,7 +156,9 @@
             "address": "경기도 수원시 팔달구 인계동 901-23",
             "businessHours": "12:00 - 22:00",
             "closedDays": "매주 화요일",
-            "corkageNote": "와인 전문, 병당 45,000원, 와인잔 무료 제공"
+            "corkageNote": "와인 전문, 병당 45,000원, 와인잔 무료 제공",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         }
     ],
     "corkageFreerestaurants": [
@@ -154,7 +174,9 @@
             "address": "서울특별시 강남구 청담동 123-45",
             "businessHours": "17:00 - 23:00",
             "closedDays": "매주 월요일",
-            "corkageNote": "콜키지 무료, 와인 디켄팅 서비스 제공"
+            "corkageNote": "콜키지 무료, 와인 디켄팅 서비스 제공",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant12.jpg",
@@ -168,7 +190,9 @@
             "address": "서울특별시 마포구 서교동 234-56",
             "businessHours": "16:00 - 22:00",
             "closedDays": "매주 화요일",
-            "corkageNote": "콜키지 무료, 모든 주류 가능"
+            "corkageNote": "콜키지 무료, 모든 주류 가능",
+            "isBreaktime": true,
+            "breaktime": "15:30 ~ 17:00"
         },
         {
             "imageURL": "restaurant13.jpg",
@@ -182,7 +206,9 @@
             "address": "서울특별시 서초구 반포동 345-67",
             "businessHours": "12:00 - 22:30",
             "closedDays": "연중무휴",
-            "corkageNote": "콜키지 무료, 소믈리에 서비스 제공"
+            "corkageNote": "콜키지 무료, 소믈리에 서비스 제공",
+            "isBreaktime": false,
+            "breaktime": ""
         },
         {
             "imageURL": "restaurant14.jpg",
@@ -196,7 +222,9 @@
             "address": "서울특별시 용산구 한남동 456-78",
             "businessHours": "18:00 - 22:00",
             "closedDays": "매주 수요일",
-            "corkageNote": "콜키지 무료, 일본 사케도 가능"
+            "corkageNote": "콜키지 무료, 일본 사케도 가능",
+            "isBreaktime": false,
+            "breaktime": ""
         },
         {
             "imageURL": "restaurant15.jpg",
@@ -210,7 +238,9 @@
             "address": "서울특별시 성동구 성수동 567-89",
             "businessHours": "11:30 - 21:30",
             "closedDays": "매주 월요일",
-            "corkageNote": "콜키지 무료, 와인잔 대여 가능"
+            "corkageNote": "콜키지 무료, 와인잔 대여 가능",
+            "isBreaktime": false,
+            "breaktime": ""
         },
         {
             "imageURL": "restaurant16.jpg",
@@ -224,7 +254,9 @@
             "address": "서울특별시 송파구 방이동 678-90",
             "businessHours": "11:00 - 21:00",
             "closedDays": "첫째 주 월요일",
-            "corkageNote": "콜키지 무료, 중국 백주도 가능"
+            "corkageNote": "콜키지 무료, 중국 백주도 가능",
+            "isBreaktime": false,
+            "breaktime": ""
         },
         {
             "imageURL": "restaurant17.jpg",
@@ -238,7 +270,9 @@
             "address": "경기도 성남시 분당구 서현동 789-12",
             "businessHours": "11:30 - 22:00",
             "closedDays": "매주 화요일",
-            "corkageNote": "콜키지 무료, 와인 냉장 보관 가능"
+            "corkageNote": "콜키지 무료, 와인 냉장 보관 가능",
+            "isBreaktime": false,
+            "breaktime": ""
         },
         {
             "imageURL": "restaurant18.jpg",
@@ -252,7 +286,9 @@
             "address": "서울특별시 강남구 논현동 890-12",
             "businessHours": "17:30 - 23:00",
             "closedDays": "연중무휴",
-            "corkageNote": "콜키지 무료, 디켄팅 서비스 무료"
+            "corkageNote": "콜키지 무료, 디켄팅 서비스 무료",
+            "isBreaktime": false,
+            "breaktime": ""
         },
         {
             "imageURL": "restaurant19.jpg",
@@ -266,7 +302,9 @@
             "address": "서울특별시 종로구 관철동 901-23",
             "businessHours": "11:00 - 22:00",
             "closedDays": "매주 일요일",
-            "corkageNote": "콜키지 무료, 모든 주류 반입 가능"
+            "corkageNote": "콜키지 무료, 모든 주류 반입 가능",
+            "isBreaktime": false,
+            "breaktime": ""
         },
         {
             "imageURL": "restaurant20.jpg",
@@ -280,7 +318,9 @@
             "address": "경기도 성남시 분당구 수내동 012-34",
             "businessHours": "17:00 - 23:30",
             "closedDays": "매주 월요일",
-            "corkageNote": "콜키지 무료, 일본 사케 반입 가능"
+            "corkageNote": "콜키지 무료, 일본 사케 반입 가능",
+            "isBreaktime": false,
+            "breaktime": ""
         }
     ]
 }

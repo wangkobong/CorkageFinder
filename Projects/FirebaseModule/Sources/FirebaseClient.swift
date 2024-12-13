@@ -66,7 +66,9 @@ public struct FirebaseClient {
                     "closedDays": data.closedDays,
                     "corkageNote": data.corkageNote,
                     "latitude": data.latitude ?? 0.0,
-                    "longitude": data.longitude ?? 0.0
+                    "longitude": data.longitude ?? 0.0,
+                    "isBreaktime": data.isBreaktime,
+                    "breaktime": data.breaktime
                 ])
                 print("Restaurant added with ID: \(ref.documentID)")
             } catch {
@@ -109,7 +111,9 @@ public struct FirebaseClient {
                     closedDays: data["closedDays"] as? String ?? "",
                     corkageNote: data["corkageNote"] as? String ?? "",
                     latitude: data["latitude"] as? Double ?? 0.0,
-                    longitude: data["longitude"] as? Double ?? 0.0
+                    longitude: data["longitude"] as? Double ?? 0.0,
+                    isBreaktime: data["isBreaktime"] as? Bool ?? false,
+                    breaktime: data["breaktime"] as? String ?? ""
                 )
             }
             
@@ -137,7 +141,9 @@ public struct FirebaseClient {
                     closedDays: "월요일",
                     corkageNote: "와인만 가능",
                     latitude: 37.12345,
-                    longitude: 127.12345
+                    longitude: 127.12345,
+                    isBreaktime: true,
+                    breaktime: "15:00 ~ 17:00"
                 )
             ])
         }
