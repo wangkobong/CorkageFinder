@@ -116,7 +116,6 @@ struct KakaoMapView: UIViewRepresentable {
             authenticationSubject.send()
             let view = controller?.getView("mapview") as? KakaoMap
             let manager = view?.getLabelManager()
-            print("매니저1: \(manager)")
         }
         
         var controller: KMController?
@@ -125,10 +124,8 @@ struct KakaoMapView: UIViewRepresentable {
         var auth: Bool
         
         func createRestaurantPois(restaurants: [RestaurantCard]) {
-            print("createRestaurantPois")
             let view = controller?.getView("mapview") as? KakaoMap
             let manager = view?.getLabelManager()
-            print("매니저2: \(manager)")
 
             // 레이어가 없다면 생성
             let restaurantLayer = LodLabelLayerOptions(
@@ -230,7 +227,7 @@ struct KakaoMapView: UIViewRepresentable {
                     ))
                     
                     poi1?.userObject = restaurant as AnyObject
-                    _ = poi1?.addPoiTappedEventHandler(target: self, handler: KakaoMapCoordinator.test(_:))
+                    _ = poi1?.addPoiTappedEventHandler(target: self, handler: KakaoMapCoordinator.didTapPoi(_:))
                 }
                 
                 layer.showAllLodPois()
@@ -238,11 +235,9 @@ struct KakaoMapView: UIViewRepresentable {
             
         }
         
-        func test(_ param: PoiInteractionEventParam) {
-            print("param: \(param.poiItem)")
-            print("param: \(param.poiItem.userObject)")
+        func didTapPoi(_ param: PoiInteractionEventParam) {
             let resaurant = param.poiItem.userObject as? RestaurantCard
-            store?.send(.tapMarker(param.poiItem.isShow, resaurant!))
+            store?.send(.tapMarker(resaurant!))
         }
         
     }

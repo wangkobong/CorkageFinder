@@ -22,17 +22,25 @@ public struct MapFeature: Equatable {
         public var isLoading = false
         public var isTimerRunning = false
         public var allRestaurants: [RestaurantCard] = []
-        public var isShowCard = false
         public var clickedRestaurant: RestaurantCard?
+        
+        public var path = StackState<Path.State>()
+
         public init() {}
     }
     
     public enum Action {
-        case map
         case fetchRestaurants
         case fetchRestaurantsResponse(TaskResult<Restaurants>)
         case addRestaurantPOIs
-        case tapMarker(Bool, RestaurantCard)
+        case tapMarker(RestaurantCard)
+        case tapCard(RestaurantCard)
+        case path(StackActionOf<Path>)
+    }
+    
+    @Reducer(state: .equatable)
+    public enum Path {
+        case restaurantDetail(RestaurantDetailFeature)
     }
     
     public init() {}
@@ -40,9 +48,7 @@ public struct MapFeature: Equatable {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .map:
-                return .none
-                
+
             case .fetchRestaurants:
                 state.isLoading = true
                 return .run { [mapClient] send in
@@ -58,7 +64,6 @@ public struct MapFeature: Equatable {
                 return .send(.addRestaurantPOIs)
                 
             case let .fetchRestaurantsResponse(.failure(error)):
-                
                 print("페치 실패: \(error)")
                 return .none
                 
@@ -66,12 +71,22 @@ public struct MapFeature: Equatable {
                 
                 return .none
                 
-            case let .tapMarker(isShowCard, restaurant):
-                state.isShowCard = true
+            case let .tapMarker(restaurant):
                 state.clickedRestaurant = restaurant
                 print("restaurant: \(restaurant)")
                 return .none
+                
+            case let .tapCard(restaurant):
+                state.path.append(.restaurantDetail(RestaurantDetailFeature.State(restaurant: restaurant)))
+                return .none
+            case .path(.popFrom(id: _)):
+                return .none
+            case .path(.push(id: _, state: _)):
+                return .none
+            case .path(.element(id: _, action: let action)):
+                return .none
             }
         }
+        .forEach(\.path, action: \.path)
     }
 }

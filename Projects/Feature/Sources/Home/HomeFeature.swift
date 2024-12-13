@@ -9,7 +9,6 @@ import ComposableArchitecture
 import FirebaseCore
 import Models
 
-
 @Reducer
 public struct HomeFeature: Equatable {
     

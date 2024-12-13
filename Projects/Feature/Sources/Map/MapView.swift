@@ -11,7 +11,7 @@ import KakaoMapsSDK
 
 public struct MapView: View {
     
-    let store: StoreOf<MapFeature>
+    @Bindable var store: StoreOf<MapFeature>
     
     @State var draw: Bool = false
     var hasAppeared = false
@@ -20,7 +20,7 @@ public struct MapView: View {
         self.store = store
     }                                                                                   
     public var body: some View {
-        NavigationStack {
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             ZStack {
                 KakaoMapView(draw: $draw, store: store).onAppear(perform: {
                     self.draw = true
@@ -38,11 +38,19 @@ public struct MapView: View {
                         Spacer()
                         MapRestaurantCardView(restaurant: store.state.clickedRestaurant!)
                             .padding(.bottom)
+                            .onTapGesture {
+                                store.send(.tapCard(store.state.clickedRestaurant!))
+                            }
                     }
                 }
                 
             }
 
+        } destination: { store in
+            switch store.case {
+            case let .restaurantDetail(state):
+                RestaurantDetailView(store: state)
+            }
         }
     }
         

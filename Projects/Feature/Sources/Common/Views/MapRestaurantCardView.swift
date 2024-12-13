@@ -16,9 +16,9 @@ struct MapRestaurantCardView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "star")
-                    .frame(width: 80, height: 150)
+                    .frame(width: 80, height: 170)
                     .background(Color.yellow)
-                VStack(spacing: 5) {
+                VStack(spacing: 8) {
                     HStack {
                         Text(restaurant.name)
                             .font(.headline)
@@ -100,7 +100,8 @@ struct MapRestaurantCardView: View {
                         Spacer()
                     }
                 }
-                
+                .padding(.vertical, 2)
+
                 Spacer()
 
             }
