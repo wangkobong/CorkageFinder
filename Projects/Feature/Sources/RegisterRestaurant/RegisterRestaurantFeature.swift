@@ -7,6 +7,8 @@
 
 import ComposableArchitecture
 import Models
+import PhotosUI
+import SwiftUI
 
 @Reducer
 public struct RegisterRestaurantFeature: Equatable {
@@ -42,6 +44,8 @@ public struct RegisterRestaurantFeature: Equatable {
         public var longitude: String = ""
         public var isBreaktime: Bool = false
         public var breaktime: String = ""
+        public var selectedItems: [PhotosPickerItem] = []
+        public var selectedImages: [UIImage] = []
         
         var isSubmitButtonEnabled: Bool {
             !name.isEmpty &&
@@ -78,6 +82,10 @@ public struct RegisterRestaurantFeature: Equatable {
         case alert(PresentationAction<Alert>)
         case isBreakTime(Bool)
         case breaktime(String)
+        case updateSelectedItems([PhotosPickerItem])
+        case processSelectedItem(PhotosPickerItem)
+        case imageLoaded(UIImage)
+        case removeImage(Int)
 
         public enum Alert: Equatable {
             case completeSave
@@ -90,6 +98,32 @@ public struct RegisterRestaurantFeature: Equatable {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+                
+            case let .updateSelectedItems(items):
+                state.selectedItems = items
+                state.selectedImages = []  // 이미지 배열 초기화
+                return .run { send in
+                    for item in items {
+                        await send(.processSelectedItem(item))
+                    }
+                }
+                
+            case let .processSelectedItem(item):
+                return .run { send in
+                    if let data = try? await item.loadTransferable(type: Data.self),
+                       let image = UIImage(data: data) {
+                        await send(.imageLoaded(image))
+                    }
+                }
+                
+            case let .removeImage(index):
+                state.selectedItems.remove(at: index)
+                state.selectedImages.remove(at: index)
+                return .none
+                
+            case let .imageLoaded(image):
+                  state.selectedImages.append(image)
+                  return .none
                 
             case let .imageURLChanged(imageURL):
                 state.imageURL = imageURL
