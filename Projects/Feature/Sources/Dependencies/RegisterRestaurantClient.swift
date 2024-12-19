@@ -5,7 +5,7 @@
 //  Created by sungyeon on 12/6/24.
 //
 
-import Foundation
+import UIKit
 import ComposableArchitecture
 import FirebaseModule
 import Models
@@ -13,6 +13,7 @@ import Models
 public struct RegisterRestaurantClient {
     var test: () async throws -> Restaurants
     var saveRestaurant: (RestaurantCard) async throws -> Bool  // 저장 함수 추가
+    var saveImages: ([UIImage]) async throws -> [String]
     
     static let live = Self(
         test: {
@@ -31,6 +32,11 @@ public struct RegisterRestaurantClient {
             //           try await FirebaseClient.live.getDocument()
             try await FirebaseClient.live.addRestaurants(restaurant)
             return true
+        },
+        saveImages: { images in
+            
+            let imageURLs = try await FirebaseClient.live.uploadImages(images)
+            return imageURLs
         }
     )
 }

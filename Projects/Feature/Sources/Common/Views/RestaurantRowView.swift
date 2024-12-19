@@ -14,15 +14,15 @@ struct RestaurantRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             // 이미지
-            AsyncImage(url: URL(string: restaurant.imageURL)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Color.gray.opacity(0.3)
-            }
-            .frame(width: 80, height: 80)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+//            AsyncImage(url: URL(string: restaurant.imageURLs)) { image in
+//                image
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fill)
+//            } placeholder: {
+//                Color.gray.opacity(0.3)
+//            }
+//            .frame(width: 80, height: 80)
+//            .clipShape(RoundedRectangle(cornerRadius: 8))
             
             // 정보
             VStack(alignment: .leading, spacing: 4) {

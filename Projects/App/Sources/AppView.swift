@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import Feature
+import FirebaseFirestore
 
 struct AppView: View {
     
@@ -47,6 +48,7 @@ struct AppView: View {
                   }
               }
         }
+
     }
 }
 

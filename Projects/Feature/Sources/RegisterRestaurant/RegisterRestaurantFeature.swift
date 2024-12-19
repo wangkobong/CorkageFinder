@@ -86,6 +86,7 @@ public struct RegisterRestaurantFeature: Equatable {
         case processSelectedItem(PhotosPickerItem)
         case imageLoaded(UIImage)
         case removeImage(Int)
+        case uploadImages([UIImage])
 
         public enum Alert: Equatable {
             case completeSave
@@ -184,34 +185,44 @@ public struct RegisterRestaurantFeature: Equatable {
             case .saveButtonTapped:
                 state.isLoading = true  // 저장 중임을 표시
                 
+                
                 return .run { [state] send in
-                    // 저장 API 호출
-                    let restaurant = RestaurantCard(
-                        imageURL: state.imageURL,
-                        name: state.name,
-                        category: state.category,
-                        isCorkageFree: state.isCorkageFree,
-                        corkageFee: state.corkageFee,
-                        sido: state.sido,
-                        sigungu: state.sigungu,
-                        phoneNumber: state.phoneNumber,
-                        address: state.address,
-                        businessHours: state.businessHours,
-                        closedDays: state.closedDays,
-                        corkageNote: state.corkageNote,
-                        latitude: Double(state.latitude) ?? 0.0,
-                        longitude: Double(state.longitude) ?? 0.0,
-                        isBreaktime: state.isBreaktime,
-                        breaktime: state.breaktime
-                    )
-                    
                     do {
-                        let success = try await registerRestaurantClient.saveRestaurant(restaurant)
-                        await send(success ? .alert(.presented(.completeSave)) : .saveFailed(HTTPError.invalidResponse))
+                        let urls = try await registerRestaurantClient.saveImages(state.selectedImages)
+                        print("저장된 유알엘: \(urls)")
                     } catch {
                         await send(.saveFailed(error))
                     }
                 }
+                
+//                return .run { [state] send in
+//                    // 저장 API 호출
+//                    let restaurant = RestaurantCard(
+//                        imageURL: state.imageURL,
+//                        name: state.name,
+//                        category: state.category,
+//                        isCorkageFree: state.isCorkageFree,
+//                        corkageFee: state.corkageFee,
+//                        sido: state.sido,
+//                        sigungu: state.sigungu,
+//                        phoneNumber: state.phoneNumber,
+//                        address: state.address,
+//                        businessHours: state.businessHours,
+//                        closedDays: state.closedDays,
+//                        corkageNote: state.corkageNote,
+//                        latitude: Double(state.latitude) ?? 0.0,
+//                        longitude: Double(state.longitude) ?? 0.0,
+//                        isBreaktime: state.isBreaktime,
+//                        breaktime: state.breaktime
+//                    )
+//                    
+//                    do {
+//                        let success = try await registerRestaurantClient.saveRestaurant(restaurant)
+//                        await send(success ? .alert(.presented(.completeSave)) : .saveFailed(HTTPError.invalidResponse))
+//                    } catch {
+//                        await send(.saveFailed(error))
+//                    }
+//                }
                 
             case let .saveFailed(error):
                 print("세이브실패 : \(error)")
@@ -246,6 +257,12 @@ public struct RegisterRestaurantFeature: Equatable {
                 print("지오코딩 실패: \(error)")
                 return .none
                 
+                
+            case let .uploadImages(images):
+                state.isLoading = true  // 저장 중임을 표시
+                
+                return .none
+                
             case let .alert(.presented(alertAction)):
                 
                 switch alertAction {
@@ -258,6 +275,7 @@ public struct RegisterRestaurantFeature: Equatable {
                         }
                     }
                     return .none
+                    
                     
                 case .saveConfirmed:
                     print("식당 저장 성공")

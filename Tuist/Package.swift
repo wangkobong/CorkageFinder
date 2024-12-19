@@ -10,9 +10,11 @@ import PackageDescription
         productTypes: [
             "ComposableArchitecture": .framework,
             "KakaoMapsSDK-SPM": .staticLibrary,
-            "FirebaseAnalytics": .framework,
-            "FirebaseAuth": .framework,
-            "FirebaseFirestore": .framework
+            "FirebaseCore": .staticFramework,
+            "FirebaseAnalytics": .staticFramework,
+            "FirebaseAuth": .staticFramework,
+            "FirebaseFirestore": .staticFramework,
+            "FirebaseStorage": .staticFramework
         ]
     )
 

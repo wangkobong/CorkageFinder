@@ -8,7 +8,6 @@
 import SwiftUI
 import ComposableArchitecture
 import KakaoMapsSDK
-import FirebaseFirestore
 import Models
 
 public struct HomeView: View {

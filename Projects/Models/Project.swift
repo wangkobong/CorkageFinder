@@ -9,6 +9,7 @@ let project = Project(
             destinations: .iOS,
             product: .staticFramework,
             bundleId: "io.tuist.Models",
+            deploymentTargets: .iOS("17.5"),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [

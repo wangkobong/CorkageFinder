@@ -9,12 +9,11 @@ let project = Project(
             destinations: .iOS,
             product: Environment.forPreview.getBoolean(default: false) ? .framework : .staticFramework,
             bundleId: "io.tuist.FirebaseModule",
+            deploymentTargets: .iOS("17.5"),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
-                .project(target: "Models", path: "../Models"),
-                .external(name: "FirebaseFirestore"),
-                .external(name: "FirebaseStorage"),
+                .project(target: "Models", path: "../Models")
             ]
         ),
         .target(

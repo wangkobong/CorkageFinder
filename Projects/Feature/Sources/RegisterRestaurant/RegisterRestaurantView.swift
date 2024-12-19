@@ -140,7 +140,7 @@ public struct RegisterRestaurantView: View {
                         .foregroundColor(.white)
                 }
                 .listRowBackground(store.isSubmitButtonEnabled ? Color.blue : Color.gray.opacity(0.5))
-                .disabled(!store.isSubmitButtonEnabled)
+//                .disabled(!store.isSubmitButtonEnabled)
 
             }
             .navigationTitle("레스토랑 정보 입력")

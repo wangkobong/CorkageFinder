@@ -6,7 +6,6 @@
 //
 
 import ComposableArchitecture
-import FirebaseCore
 import Models
 
 @Reducer

@@ -9,6 +9,7 @@ let project = Project(
             destinations: .iOS,
             product: .app,
             bundleId: "io.tuist.CorkageFinder",
+            deploymentTargets: .iOS("17.5"),
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchStoryboardName": "LaunchScreen.storyboard",
@@ -31,6 +32,7 @@ let project = Project(
             ],
             settings: .settings(
                 base: [
+                    "SWIFT_VERSION": "5.9",  // 사용 중인 Swift 버전
                     "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey),
                     "KAKAO_API_KEY": .string(SecretConfig.Keys.kakaoAPIKey),
                     "OTHER_LDFLAGS": ["-ObjC"]

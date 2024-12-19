@@ -9,6 +9,7 @@ let project = Project(
             destinations: .iOS,
             product: Environment.forPreview.getBoolean(default: false) ? .framework : .staticFramework,
             bundleId: "io.tuist.Feature",
+            deploymentTargets: .iOS("17.5"),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
