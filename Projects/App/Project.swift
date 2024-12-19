@@ -32,7 +32,7 @@ let project = Project(
             ],
             settings: .settings(
                 base: [
-                    "SWIFT_VERSION": "5.9",  // 사용 중인 Swift 버전
+                    "SWIFT_VERSION": "5.9",  
                     "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey),
                     "KAKAO_API_KEY": .string(SecretConfig.Keys.kakaoAPIKey),
                     "OTHER_LDFLAGS": ["-ObjC"]

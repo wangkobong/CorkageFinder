@@ -131,10 +131,14 @@ public struct FirebaseClient {
             var uploadedURLs: [String] = []
             var imageRefs: [String: StorageReference] = [:]
             
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            let dateString = dateFormatter.string(from: Date())
+            
             for (index, image) in images.enumerated() {
                 guard let imageData = image.jpegData(compressionQuality: 0.5) else { continue }
                 
-                let path = "restaurants/\(UUID().uuidString).jpg"
+                let path = "restaurants/\(dateString)/\(UUID().uuidString).jpg"
                 let imageRef = storage.reference().child(path)
                 
                 let metadata = StorageMetadata()

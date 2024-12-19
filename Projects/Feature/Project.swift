@@ -16,7 +16,8 @@ let project = Project(
                 .project(target: "FirebaseModule", path: "../FirebaseModule"),
                 .project(target: "Models", path: "../Models"),
                 .external(name: "ComposableArchitecture"),
-                .external(name: "KakaoMapsSDK-SPM")
+                .external(name: "KakaoMapsSDK-SPM"),
+                .external(name: "Kingfisher")
             ],
             settings: .settings(
                 base: [

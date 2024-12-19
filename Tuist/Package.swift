@@ -14,7 +14,8 @@ import PackageDescription
             "FirebaseAnalytics": .staticFramework,
             "FirebaseAuth": .staticFramework,
             "FirebaseFirestore": .staticFramework,
-            "FirebaseStorage": .staticFramework
+            "FirebaseStorage": .staticFramework,
+            "Kingfisher": .framework,
         ]
     )
 
@@ -25,6 +26,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.16.1"),
         .package(url: "https://github.com/kakao-mapsSDK/KakaoMapsSDK-SPM.git", from: "2.12.2"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.6.0")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.6.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "8.1.3")
     ]
 )

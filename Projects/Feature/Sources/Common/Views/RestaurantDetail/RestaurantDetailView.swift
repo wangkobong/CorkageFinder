@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import Models
+import Kingfisher
 
 struct RestaurantDetailView: View {
     
@@ -21,10 +22,7 @@ struct RestaurantDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // 상단 이미지
-                Rectangle()  // 나중에 실제 이미지로 교체
-                    .fill(Color.gray.opacity(0.2))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 250)
+                RestaurantImageCarouselWithPaging(imageURLs: store.restaurant.imageURLs)
                 
                 VStack(alignment: .leading, spacing: 24) {
                     // 기본 정보
