@@ -27,26 +27,6 @@ struct CorkageFinderApp: App {
                         print("앱키: \(appKey)")
                         SDKInitializer.InitSDK(appKey: appKey)
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                        if let app = FirebaseApp.app() {
-                            do {
-                                print("Firestore 초기화 직전")
-                                print("Firebase 상태 확인:")
-                                print("- app:", app)
-                                print("- options:", app.options)
-                                print("- name:", app.name)
-                                print("- isDataCollectionDefaultEnabled:", app.isDataCollectionDefaultEnabled)
-                                
-                                let db = Firestore.firestore()
-                                print("Firestore 초기화 성공:", db)
-                            } catch {
-                                print("Firestore 초기화 실패:", error)
-                            }
-                        } else {
-                            print("Firebase가 사라졌습니다")
-                        }
-                    }
-                
                 }
         }
     }

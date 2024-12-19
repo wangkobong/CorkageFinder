@@ -27,7 +27,6 @@ public struct RegisterRestaurantFeature: Equatable {
         
         public var isLoading = false
         public var isTimerRunning = false
-        public var imageURL: String = ""
         public var name: String = ""
         public var category: HomeRestaurantCategory = .korean // 기본값 설정 필요
         public var isCorkageFree: Bool = false
@@ -63,7 +62,6 @@ public struct RegisterRestaurantFeature: Equatable {
     }
     
     public enum Action {
-        case imageURLChanged(String)
         case nameChanged(String)
         case categoryChanged(HomeRestaurantCategory)
         case isCorkageFreeChanged(Bool)
@@ -126,10 +124,6 @@ public struct RegisterRestaurantFeature: Equatable {
                   state.selectedImages.append(image)
                   return .none
                 
-            case let .imageURLChanged(imageURL):
-                state.imageURL = imageURL
-                return .none
-                
             case let .nameChanged(name):
                 state.name = name
                 return .none
@@ -185,45 +179,42 @@ public struct RegisterRestaurantFeature: Equatable {
             case .saveButtonTapped:
                 state.isLoading = true  // 저장 중임을 표시
                 
-                
                 return .run { [state] send in
                     do {
-                        let urls = try await registerRestaurantClient.saveImages(state.selectedImages)
-                        print("저장된 유알엘: \(urls)")
+                        // 이미지가 있을 때만 업로드 수행
+                        let urls: [String]
+                        if !state.selectedImages.isEmpty {
+                            urls = try await registerRestaurantClient.saveImages(state.selectedImages)
+                        } else {
+                            urls = []  // 이미지가 없으면 빈 배열 사용
+                        }
+                        
+                        let restaurant = RestaurantCard(
+                            imageURLs: urls,
+                            name: state.name,
+                            category: state.category,
+                            isCorkageFree: state.isCorkageFree,
+                            corkageFee: state.corkageFee,
+                            sido: state.sido,
+                            sigungu: state.sigungu,
+                            phoneNumber: state.phoneNumber,
+                            address: state.address,
+                            businessHours: state.businessHours,
+                            closedDays: state.closedDays,
+                            corkageNote: state.corkageNote,
+                            latitude: Double(state.latitude) ?? 0.0,
+                            longitude: Double(state.longitude) ?? 0.0,
+                            isBreaktime: state.isBreaktime,
+                            breaktime: state.breaktime
+                        )
+                        
+                        let success = try await registerRestaurantClient.saveRestaurant(restaurant)
+                        await send(success ? .alert(.presented(.completeSave)) : .saveFailed(HTTPError.invalidResponse))
                     } catch {
                         await send(.saveFailed(error))
                     }
                 }
-                
-//                return .run { [state] send in
-//                    // 저장 API 호출
-//                    let restaurant = RestaurantCard(
-//                        imageURL: state.imageURL,
-//                        name: state.name,
-//                        category: state.category,
-//                        isCorkageFree: state.isCorkageFree,
-//                        corkageFee: state.corkageFee,
-//                        sido: state.sido,
-//                        sigungu: state.sigungu,
-//                        phoneNumber: state.phoneNumber,
-//                        address: state.address,
-//                        businessHours: state.businessHours,
-//                        closedDays: state.closedDays,
-//                        corkageNote: state.corkageNote,
-//                        latitude: Double(state.latitude) ?? 0.0,
-//                        longitude: Double(state.longitude) ?? 0.0,
-//                        isBreaktime: state.isBreaktime,
-//                        breaktime: state.breaktime
-//                    )
-//                    
-//                    do {
-//                        let success = try await registerRestaurantClient.saveRestaurant(restaurant)
-//                        await send(success ? .alert(.presented(.completeSave)) : .saveFailed(HTTPError.invalidResponse))
-//                    } catch {
-//                        await send(.saveFailed(error))
-//                    }
-//                }
-                
+
             case let .saveFailed(error):
                 print("세이브실패 : \(error)")
                 return .none
@@ -276,11 +267,9 @@ public struct RegisterRestaurantFeature: Equatable {
                     }
                     return .none
                     
-                    
                 case .saveConfirmed:
-                    print("식당 저장 성공")
                     state.isLoading = false
-                    state.imageURL = ""
+                    state.selectedImages = []
                     state.name = ""
                     state.category = .korean
                     state.isCorkageFree = false
@@ -295,6 +284,8 @@ public struct RegisterRestaurantFeature: Equatable {
                     state.validateAddress = ""
                     state.latitude = ""
                     state.longitude = ""
+                    state.isBreaktime = false
+                    state.breaktime = ""
                     return .none
                 }
                 

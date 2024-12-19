@@ -13,7 +13,9 @@ let project = Project(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
-                .project(target: "Models", path: "../Models")
+                .project(target: "Models", path: "../Models"),
+                .external(name: "FirebaseFirestore"),
+                .external(name: "FirebaseStorage")
             ]
         ),
         .target(
