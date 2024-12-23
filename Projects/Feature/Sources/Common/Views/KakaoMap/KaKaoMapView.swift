@@ -143,7 +143,7 @@ struct KakaoMapView: UIViewRepresentable {
                 PoiTextLineStyle(
                     textStyle: TextStyle(
                         fontSize: 30,
-                        fontColor: UIColor.red,
+                        fontColor: UIColor.black,
                         strokeThickness: 2,
                         strokeColor: UIColor.white
                     )
@@ -151,14 +151,21 @@ struct KakaoMapView: UIViewRepresentable {
             ]
             
             let textStyle = PoiTextStyle(textLineStyles: textLineStyles)
+            
+            let koreanIcon = HomeRestaurantCategory.korean.emoji.toImage()
+            let japaneseIcon = HomeRestaurantCategory.japanese.emoji.toImage()
+            let chinesIcon = HomeRestaurantCategory.chinese.emoji.toImage()
+            let westernIcon = HomeRestaurantCategory.western.emoji.toImage()
+            let asianIcon = HomeRestaurantCategory.asian.emoji.toImage()
+            let etcIcon = HomeRestaurantCategory.etc.emoji.toImage()
 
             
-            let koreanIconStyle = PoiIconStyle(symbol: UIImage(systemName: "star.fill"), anchorPoint: anchorPoint)
-            let japaneseIconStyle = PoiIconStyle(symbol: UIImage(systemName: "pencil"), anchorPoint: anchorPoint)
-            let chineseIconStyle = PoiIconStyle(symbol: UIImage(systemName: "folder"), anchorPoint: anchorPoint)
-            let westernIconStyle = PoiIconStyle(symbol: UIImage(systemName: "soccerball"), anchorPoint: anchorPoint)
-            let asianIconStyle = PoiIconStyle(symbol: UIImage(systemName: "basketball.fill"), anchorPoint: anchorPoint)
-            let etcIconStyle = PoiIconStyle(symbol: UIImage(systemName: "star"), anchorPoint: anchorPoint)
+            let koreanIconStyle = PoiIconStyle(symbol: koreanIcon, anchorPoint: anchorPoint)
+            let japaneseIconStyle = PoiIconStyle(symbol: japaneseIcon, anchorPoint: anchorPoint)
+            let chineseIconStyle = PoiIconStyle(symbol: chinesIcon, anchorPoint: anchorPoint)
+            let westernIconStyle = PoiIconStyle(symbol: westernIcon, anchorPoint: anchorPoint)
+            let asianIconStyle = PoiIconStyle(symbol: asianIcon, anchorPoint: anchorPoint)
+            let etcIconStyle = PoiIconStyle(symbol: etcIcon, anchorPoint: anchorPoint)
             
             
             let koreanPoiStyle = PoiStyle(

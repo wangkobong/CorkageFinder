@@ -65,21 +65,21 @@ public struct HomeView: View {
                categoryBox(
                    title: "한식",
                    systemImage: "bowl.fill",
-                   emoji: "🍚",
+                   emoji: HomeRestaurantCategory.korean.emoji,
                    category: .korean
                )
                
                categoryBox(
                    title: "일식",
                    systemImage: "fish.fill",
-                   emoji: "🍱",
+                   emoji: HomeRestaurantCategory.japanese.emoji,
                    category: .japanese
                )
                
                categoryBox(
                    title: "중식",
                    systemImage: "wok.fill",
-                   emoji: "🥢",
+                   emoji: HomeRestaurantCategory.chinese.emoji,
                    category: .chinese
                )
            }
@@ -89,21 +89,21 @@ public struct HomeView: View {
                categoryBox(
                    title: "양식",
                    systemImage: "fork.knife",
-                   emoji: "🍝",
+                   emoji: HomeRestaurantCategory.western.emoji,
                    category: .western
                )
                
                categoryBox(
                    title: "아시안",
                    systemImage: "leaf.fill",
-                   emoji: "🍜",
+                   emoji: HomeRestaurantCategory.asian.emoji,
                    category: .asian
                )
                
                categoryBox(
                    title: "기타",
                    systemImage: "ellipsis.circle.fill",
-                   emoji: "🍽️",
+                   emoji: HomeRestaurantCategory.etc.emoji,
                    category: .etc
                )
            }

@@ -26,26 +26,26 @@ public enum HomeRestaurantCategory: String, Codable, CaseIterable {
         }
     }
     
-    var symbol: String {
+    public var symbol: String {
         switch self {
         // SF Symbols 사용시
-        case .korean: return "bowl.fill"  // 또는 "🍚"
-        case .japanese: return "fish.fill"  // 또는 "🍱"
-        case .chinese: return "wok.fill"  // 또는 "🥢"
+        case .korean: return "bowl.fill"  // 또는 "🥘"
+        case .japanese: return "fish.fill"  // 또는 "🍣"
+        case .chinese: return "wok.fill"  // 또는 "🥟"
         case .western: return "fork.knife"  // 또는 "🍝"
         case .asian: return "leaf.fill"  // 또는 "🍜"
         case .etc: return "ellipsis.circle.fill"  // 또는 "🍽️"
         }
     }
     
-    var emoji: String {
+    public var emoji: String {
         switch self {
-        case .korean: return "🍚"
-        case .japanese: return "🍱"
-        case .chinese: return "🥢"
+        case .korean: return "🥘"
+        case .japanese: return "🍣"
+        case .chinese: return "🥟"
         case .western: return "🍝"
         case .asian: return "🍜"
-        case .etc: return "🍽️"
+        case .etc: return "🥡"
         }
     }
 }
