@@ -17,6 +17,7 @@ public struct RestaurantCard: Codable, Equatable {
     public let sigungu: String
     public let phoneNumber: String
     public let address: String
+    public let addressDetail: String
     public let businessHours: String
     public let closedDays: String
     public let corkageNote: String
@@ -35,6 +36,7 @@ public struct RestaurantCard: Codable, Equatable {
         sigungu: String,
         phoneNumber: String,
         address: String,
+        addressDetail: String,
         businessHours: String,
         closedDays: String,
         corkageNote: String,
@@ -52,6 +54,7 @@ public struct RestaurantCard: Codable, Equatable {
         self.sigungu = sigungu
         self.phoneNumber = phoneNumber
         self.address = address
+        self.addressDetail = addressDetail
         self.businessHours = businessHours
         self.closedDays = closedDays
         self.corkageNote = corkageNote
@@ -73,6 +76,7 @@ extension RestaurantCard {
         sigungu: "강남구",
         phoneNumber: "02-1234-5678",
         address: "서울특별시 강남구 테헤란로 123",
+        addressDetail: "송파빌딩 3층",
         businessHours: "11:30 - 22:00",
         closedDays: "매주 월요일",
         corkageNote: "와인 한 병당 콜키지 30,000원",

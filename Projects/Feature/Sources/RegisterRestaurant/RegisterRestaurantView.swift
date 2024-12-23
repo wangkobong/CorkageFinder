@@ -102,11 +102,13 @@ public struct RegisterRestaurantView: View {
                     TextField("주소", text: $store.address.sending(\.addressChanged))
                     // 검증된 주소가 있을 경우 표시
                     if store.state.validateAddress == "정확한 주소를 입력해주세요." {
+
                         Text("정확한 주소를 입력해주세요.")
                             .font(.caption)
                             .foregroundColor(.red)
                     } else if store.state.validateAddress != "" {
-                        Text(store.state.validateAddress)
+                        TextField("상세주소", text: $store.addressDetail.sending(\.addressDetailChanged))
+                        Text(store.state.fullAddress)
                             .font(.caption)
                             .foregroundColor(.gray)
                     }

@@ -35,6 +35,7 @@ public struct RegisterRestaurantFeature: Equatable {
         public var sigungu: String = ""
         public var phoneNumber: String = ""
         public var address: String = ""
+        public var addressDetail: String = ""
         public var businessHours: String = ""
         public var closedDays: String = ""
         public var corkageNote: String = ""
@@ -58,6 +59,15 @@ public struct RegisterRestaurantFeature: Equatable {
             !validateAddress.isEmpty && validateAddress != "정확한 주소를 입력해주세요."  && !latitude.isEmpty && !longitude.isEmpty
         }
         
+        var fullAddress: String {
+            get {
+                return validateAddress + " " + addressDetail
+            }
+            set {
+                validateAddress = newValue
+            }
+        }
+        
         public init() {}
     }
     
@@ -70,6 +80,7 @@ public struct RegisterRestaurantFeature: Equatable {
         case sidoChanged(String)
         case sigunguChanged(String)
         case addressChanged(String)
+        case addressDetailChanged(String)
         case phoneNumberChanged(String)
         case businessHoursChanged(String)
         case closedDaysChanged(String)
@@ -156,6 +167,10 @@ public struct RegisterRestaurantFeature: Equatable {
                 state.address = address
                 return .none
                 
+            case let .addressDetailChanged(addressDetail):
+                state.addressDetail = addressDetail
+                return .none
+                
             case let .phoneNumberChanged(phoneNumber):
                 state.phoneNumber = phoneNumber
                 return .none
@@ -198,7 +213,8 @@ public struct RegisterRestaurantFeature: Equatable {
                             sido: state.sido,
                             sigungu: state.sigungu,
                             phoneNumber: state.phoneNumber,
-                            address: state.address,
+                            address: state.fullAddress, 
+                            addressDetail: state.addressDetail,
                             businessHours: state.businessHours,
                             closedDays: state.closedDays,
                             corkageNote: state.corkageNote,
@@ -230,8 +246,6 @@ public struct RegisterRestaurantFeature: Equatable {
                 }
             case let .validateAdressResponse(.success(geocodingResponse)):
                 if geocodingResponse.documents.count == 1 {
-                    print("지오코딩 성공")
-                    print("\(geocodingResponse.documents[0].address)")
                     let data = geocodingResponse.documents[0].address
                     state.sido = data.region1depthName
                     state.sigungu = data.region2depthName
@@ -278,6 +292,8 @@ public struct RegisterRestaurantFeature: Equatable {
                     state.sigungu = ""
                     state.phoneNumber = ""
                     state.address = ""
+                    state.addressDetail = ""
+                    state.fullAddress = ""
                     state.businessHours = ""
                     state.closedDays = ""
                     state.corkageNote = ""
