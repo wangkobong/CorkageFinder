@@ -36,22 +36,25 @@ public struct RegisterRestaurantFeature: Equatable {
         public var phoneNumber: String = ""
         public var address: String = ""
         public var addressDetail: String = ""
-        public var businessHours: String = ""
         public var closedDays: String = ""
         public var corkageNote: String = ""
         public var validateAddress: String = ""
+        public var businessHours: String = ""
+        public var breaktime: String = ""
         public var latitude: String = ""
         public var longitude: String = ""
         public var isBreaktime: Bool = false
-        public var breaktime: String = ""
         public var selectedItems: [PhotosPickerItem] = []
         public var selectedImages: [UIImage] = []
+        public var openTime: Date = Calendar.current.date(from: DateComponents(hour: 9, minute: 0)) ?? Date()
+        public var closeTime: Date = Calendar.current.date(from: DateComponents(hour: 18, minute: 0)) ?? Date()
+        public var breakStartTime: Date = Calendar.current.date(from: DateComponents(hour: 14, minute: 0)) ?? Date()
+        public var breakEndTime: Date = Calendar.current.date(from: DateComponents(hour: 15, minute: 0)) ?? Date()
         
         var isSubmitButtonEnabled: Bool {
             !name.isEmpty &&
             !phoneNumber.isEmpty &&
             !businessHours.isEmpty &&
-            !closedDays.isEmpty &&
             isLocationValid
         }
         
@@ -68,6 +71,18 @@ public struct RegisterRestaurantFeature: Equatable {
             }
         }
         
+        var computedBusinessHours: String {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            return "\(formatter.string(from: openTime)) ~ \(formatter.string(from: closeTime))"
+        }
+        
+        var computedBreaktime: String {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            return "\(formatter.string(from: breakStartTime)) ~ \(formatter.string(from: breakEndTime))"
+        }
+        
         public init() {}
     }
     
@@ -82,7 +97,6 @@ public struct RegisterRestaurantFeature: Equatable {
         case addressChanged(String)
         case addressDetailChanged(String)
         case phoneNumberChanged(String)
-        case businessHoursChanged(String)
         case closedDaysChanged(String)
         case saveButtonTapped
         case saveFailed(Error)
@@ -90,12 +104,15 @@ public struct RegisterRestaurantFeature: Equatable {
         case validateAdressResponse(TaskResult<GeocodingResponse>)
         case alert(PresentationAction<Alert>)
         case isBreakTime(Bool)
-        case breaktime(String)
         case updateSelectedItems([PhotosPickerItem])
         case processSelectedItem(PhotosPickerItem)
         case imageLoaded(UIImage)
         case removeImage(Int)
         case uploadImages([UIImage])
+        case openTimeChanged(Date)
+        case closeTimeChanged(Date)
+        case breakStartTimeChanged(Date)
+        case breakEndTimeChanged(Date)
 
         public enum Alert: Equatable {
             case completeSave
@@ -174,11 +191,7 @@ public struct RegisterRestaurantFeature: Equatable {
             case let .phoneNumberChanged(phoneNumber):
                 state.phoneNumber = phoneNumber
                 return .none
-                
-            case let .businessHoursChanged(businessHour):
-                state.businessHours = businessHour
-                return .none
-                
+
             case let .closedDaysChanged(closedDays):
                 state.closedDays = closedDays
                 return .none
@@ -187,13 +200,10 @@ public struct RegisterRestaurantFeature: Equatable {
                 state.isBreaktime = isBreaktime
                 return .none
                 
-            case let .breaktime(breaktime):
-                state.breaktime = breaktime
-                return .none
-                
             case .saveButtonTapped:
                 state.isLoading = true  // 저장 중임을 표시
-                
+                state.businessHours = state.computedBusinessHours
+                state.breaktime = state.computedBreaktime
                 return .run { [state] send in
                     do {
                         // 이미지가 있을 때만 업로드 수행
@@ -203,7 +213,7 @@ public struct RegisterRestaurantFeature: Equatable {
                         } else {
                             urls = []  // 이미지가 없으면 빈 배열 사용
                         }
-                        
+
                         let restaurant = RestaurantCard(
                             imageURLs: urls,
                             name: state.name,
@@ -213,7 +223,7 @@ public struct RegisterRestaurantFeature: Equatable {
                             sido: state.sido,
                             sigungu: state.sigungu,
                             phoneNumber: state.phoneNumber,
-                            address: state.fullAddress, 
+                            address: state.fullAddress,
                             addressDetail: state.addressDetail,
                             businessHours: state.businessHours,
                             closedDays: state.closedDays,
@@ -307,6 +317,18 @@ public struct RegisterRestaurantFeature: Equatable {
                 
             case .alert:
                 if state.alert == nil { return .none }
+                return .none
+            case let .openTimeChanged(openTime):
+                state.openTime = openTime
+                return .none
+            case let .closeTimeChanged(closeTime):
+                state.closeTime = closeTime
+                return .none
+            case let .breakStartTimeChanged(breakStartTime):
+                state.breakStartTime = breakStartTime
+                return .none
+            case let .breakEndTimeChanged(breakEndTime):
+                state.breakEndTime = breakEndTime
                 return .none
             }
         }

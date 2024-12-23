@@ -97,8 +97,6 @@ public struct RegisterRestaurantView: View {
                 }
                 
                 Section(header: Text("위치 정보")) {
-//                    TextField("시/도", text: $store.sido.sending(\.sidoChanged))
-//                    TextField("시/군/구", text: $store.sigungu.sending(\.sigunguChanged))
                     TextField("주소", text: $store.address.sending(\.addressChanged))
                     // 검증된 주소가 있을 경우 표시
                     if store.state.validateAddress == "정확한 주소를 입력해주세요." {
@@ -125,12 +123,49 @@ public struct RegisterRestaurantView: View {
                 
                 Section(header: Text("연락처 및 영업시간")) {
                     TextField("전화번호", text: $store.phoneNumber.sending(\.phoneNumberChanged))
-                    TextField("영업시간", text: $store.businessHours.sending(\.businessHoursChanged))
-                    TextField("휴무일", text: $store.closedDays.sending(\.closedDaysChanged))
-                    Toggle("브레이크타임", isOn: $store.isBreaktime.sending(\.isBreakTime))
-                    if store.isBreaktime {
-                        TextField("브레이크타임", text: $store.breaktime.sending(\.breaktime))
-                    }
+                    HStack {
+                         Text("영업시간")
+                         Spacer()
+                         DatePicker(
+                             "시작",
+                             selection: $store.openTime.sending(\.openTimeChanged),
+                             displayedComponents: .hourAndMinute
+                         )
+                         .labelsHidden()
+                         
+                         Text("~")
+                         
+                         DatePicker(
+                             "종료",
+                             selection: $store.closeTime.sending(\.closeTimeChanged),
+                             displayedComponents: .hourAndMinute
+                         )
+                         .labelsHidden()
+                     }
+                     
+                     TextField("휴무일", text: $store.closedDays.sending(\.closedDaysChanged))
+                     Toggle("브레이크타임", isOn: $store.isBreaktime.sending(\.isBreakTime))
+                     if store.isBreaktime {
+                         HStack {
+                             Text("브레이크타임")
+                             Spacer()
+                             DatePicker(
+                                 "시작",
+                                 selection: $store.breakStartTime.sending(\.breakStartTimeChanged),
+                                 displayedComponents: .hourAndMinute
+                             )
+                             .labelsHidden()
+                             
+                             Text("~")
+                             
+                             DatePicker(
+                                 "종료",
+                                 selection: $store.breakEndTime.sending(\.breakEndTimeChanged),
+                                 displayedComponents: .hourAndMinute
+                             )
+                             .labelsHidden()
+                         }
+                     }
                 }
                 
                 
@@ -142,7 +177,7 @@ public struct RegisterRestaurantView: View {
                         .foregroundColor(.white)
                 }
                 .listRowBackground(store.isSubmitButtonEnabled ? Color.blue : Color.gray.opacity(0.5))
-//                .disabled(!store.isSubmitButtonEnabled)
+                .disabled(!store.isSubmitButtonEnabled)
 
             }
             .navigationTitle("레스토랑 정보 입력")
