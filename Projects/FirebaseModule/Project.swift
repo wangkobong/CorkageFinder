@@ -15,7 +15,9 @@ let project = Project(
             dependencies: [
                 .project(target: "Models", path: "../Models"),
                 .external(name: "FirebaseFirestore"),
-                .external(name: "FirebaseStorage")
+                .external(name: "FirebaseStorage"),
+                .external(name: "FirebaseAuth"),
+                .external(name: "GoogleSignIn")
             ]
         ),
         .target(

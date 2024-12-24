@@ -27,8 +27,7 @@ let project = Project(
                 .external(name: "KakaoMapsSDK-SPM"),
                 .external(name: "FirebaseAnalytics"),
                 .external(name: "FirebaseAuth"),
-                .external(name: "FirebaseFirestore"),
-                .external(name: "FirebaseCore")
+                .external(name: "GoogleSignIn")
             ],
             settings: .settings(
                 base: [

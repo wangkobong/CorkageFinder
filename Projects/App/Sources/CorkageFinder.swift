@@ -5,6 +5,7 @@ import KakaoMapsSDK
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseModule
+import GoogleSignIn
 
 @main
 struct CorkageFinderApp: App {
@@ -27,6 +28,9 @@ struct CorkageFinderApp: App {
                         print("앱키: \(appKey)")
                         SDKInitializer.InitSDK(appKey: appKey)
                     }
+                }
+                .onOpenURL { url in
+                    GIDSignIn.sharedInstance.handle(url)
                 }
         }
     }

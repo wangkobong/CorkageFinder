@@ -10,6 +10,10 @@ import UIKit
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
+import GoogleSignIn
+import AppAuth
+import GTMAppAuth
 import Models
 
 public struct FirebaseClient {
@@ -20,6 +24,8 @@ public struct FirebaseClient {
     public var getApprovedRestaurants: () async throws -> Restaurants
     public var uploadImages: ([UIImage]) async throws -> [String]
     public var deleteImages: ([String]) async throws -> Void
+    public var login: () async throws -> Void
+    public var logout: () async throws -> Void
     
     // 초기화 상태 체크 함수 추가
     private static func ensureFirebaseInitialized() throws {
@@ -175,6 +181,44 @@ public struct FirebaseClient {
                     try await imageRef.delete()
                 }
             }
+        },
+        login: { 
+            
+            // 1. Google Sign In 설정
+            guard let clientID = FirebaseApp.app()?.options.clientID,
+                  let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let rootViewController = await windowScene.windows.first?.rootViewController
+            else {
+                throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Client ID not found"])
+            }
+            
+            // 2. GIDSignIn 설정
+            let config = GIDConfiguration(clientID: clientID)
+            GIDSignIn.sharedInstance.configuration = config
+
+            print("Configuration set successfully") // 디버깅용 로그
+
+            // 3. 로그인 시도
+            return try await withCheckedThrowingContinuation { continuation in
+                print("Attempting sign in") // 디버깅용 로그
+                
+                GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { result, error in
+                    print("Sign in callback received") // 디버깅용 로그
+                    
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    // ... 나머지 코드
+                }
+            }
+            
+            
+
+        },
+        logout: {
+            try Auth.auth().signOut()
+            return
         }
     )
     
@@ -208,6 +252,8 @@ public struct FirebaseClient {
         uploadImages: { images in
             return images.map { _ in "https://mock-image-url.com/\(UUID().uuidString).jpg" }
         },
-        deleteImages: { _ in }
+        deleteImages: { _ in },
+        login: {  },
+        logout: {  }
     )
 }
