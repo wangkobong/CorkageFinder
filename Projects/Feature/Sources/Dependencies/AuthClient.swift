@@ -14,6 +14,7 @@ public struct AuthClient {
     var tryGoogleLogin: () async throws -> Void
     var tryAppleLogin: () async throws -> Void
     var logout: () async throws -> Void
+    var isLogin: () async throws -> Bool
     
     static let live = Self(
         tryGoogleLogin: {
@@ -30,7 +31,11 @@ public struct AuthClient {
             try await FirebaseClient.live.logout()
             print("로그아웃시도")
             return
-        })
+        },
+        isLogin: {
+            return try await FirebaseClient.live.checkAuthState()
+        }
+    )
 }
 
 // DependencyKey 준수

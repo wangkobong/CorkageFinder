@@ -27,9 +27,11 @@ public struct MypageFeature: Equatable {
     }
     
     public enum Action {
+        case checkAuthState
         case login(LoginType)
         case logout
         case loginResponse(TaskResult<Void>)
+        case checkAuthStateResponse(TaskResult<Bool>)
     }
     
     public init() {}
@@ -37,6 +39,24 @@ public struct MypageFeature: Equatable {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .checkAuthState:
+                state.isLoading = true
+                return .run { [authClient] send in
+                    await send(.checkAuthStateResponse(
+                        TaskResult {
+                            try await authClient.isLogin()
+                        }
+                    ))
+                }
+            case .checkAuthStateResponse(.success(let isLoggedIn)):
+                state.isLoading = false
+                state.isLogined = isLoggedIn
+                return .none
+                
+            case .checkAuthStateResponse(.failure(let error)):
+                state.isLoading = false
+                print("Auth state check failed: \(error)")
+                return .none
             case let .login(loginType):
                 print("인증시도")
                 

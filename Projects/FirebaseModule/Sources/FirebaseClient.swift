@@ -28,6 +28,7 @@ public struct FirebaseClient {
     public var googleLogin: () async throws -> Void
     public var appleLogin: () async throws -> Void
     public var logout: () async throws -> Void
+    public var checkAuthState: () async throws -> Bool
     
     // 초기화 상태 체크 함수 추가
     private static func ensureFirebaseInitialized() throws {
@@ -301,6 +302,9 @@ public struct FirebaseClient {
         logout: {
             try Auth.auth().signOut()
             return
+        },
+        checkAuthState: {
+            return Auth.auth().currentUser != nil
         }
     )
     
@@ -337,7 +341,8 @@ public struct FirebaseClient {
         deleteImages: { _ in },
         googleLogin: {  },
         appleLogin: {  },
-        logout: {  }
+        logout: {  },
+        checkAuthState: { return true }
     )
     
     private class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
