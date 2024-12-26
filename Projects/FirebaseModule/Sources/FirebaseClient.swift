@@ -304,6 +304,26 @@ public struct FirebaseClient {
             return
         },
         checkAuthState: {
+            if let user = Auth.auth().currentUser {
+                print("""
+                유저 정보:
+                - 이메일: \(user.email ?? "없음")
+                - 이름: \(user.displayName ?? "없음")
+                - UID: \(user.uid)
+                - 전화번호: \(user.phoneNumber ?? "없음")
+                - 프로필 URL: \(user.photoURL?.absoluteString ?? "없음")
+                """)
+                
+                // 이메일 인증 여부
+                if user.isEmailVerified {
+                    print("이메일 인증됨")
+                }
+                
+                // 프로바이더 정보 (Google, Apple 등)
+                for profile in user.providerData {
+                    print("로그인 방식: \(profile.providerID)")
+                }
+            }
             return Auth.auth().currentUser != nil
         }
     )
