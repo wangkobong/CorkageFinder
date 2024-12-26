@@ -202,16 +202,40 @@ public struct FirebaseClient {
             return try await withCheckedThrowingContinuation { continuation in
                 print("Attempting sign in") // 디버깅용 로그
                 
-                GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { result, error in
-                    print("Sign in callback received") // 디버깅용 로그
-                    
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                        return
-                    }
-                    // ... 나머지 코드
-                }
+                DispatchQueue.main.async {
+                      GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { result, error in
+                          print("Sign in callback received")
+                          
+                          if let error = error {
+                              continuation.resume(throwing: error)
+                              return
+                          }
+                          
+                          guard let result = result,
+                                let idToken = result.user.idToken?.tokenString else {
+                              continuation.resume(throwing: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to get ID token"]))
+                              return
+                          }
+                          
+                          let credential = GoogleAuthProvider.credential(
+                              withIDToken: idToken,
+                              accessToken: result.user.accessToken.tokenString
+                          )
+                          
+                          print("로그인 성공 결과: \(result.user.description)")
+                          
+                          Task {
+                              do {
+                                  try await Auth.auth().signIn(with: credential)
+                                  continuation.resume(returning: ())
+                              } catch {
+                                  continuation.resume(throwing: error)
+                              }
+                          }
+                      }
+                  }
             }
+            
             
             
 

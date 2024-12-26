@@ -15,6 +15,15 @@ let project = Project(
                     "UILaunchStoryboardName": "LaunchScreen.storyboard",
                     "KAKAO_APP_KEY": "$(KAKAO_APP_KEY)",
                     "KAKAO_API_KEY": "$(KAKAO_API_KEY)",
+                    "GOOGLE_CLIENT_ID" : "$(GOOGLE_CLIENT_ID)",
+                    "CFBundleURLTypes": [
+                        [
+                            "CFBundleURLSchemes": [
+                                "com.googleusercontent.apps.\(SecretConfig.Keys.googleClientID)"
+                            ],
+                            "CFBundleURLName": "GoogleSignIn"
+                        ]
+                    ]
                 ]
             ),
             sources: ["Sources/**"],

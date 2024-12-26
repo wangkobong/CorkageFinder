@@ -35,7 +35,7 @@ public struct MypageView: View {
 //                        }
                         
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("로그인")
+                            Text("로그인이 필요합니다.")
                                 .font(.title)
                         }
                     }
@@ -46,6 +46,51 @@ public struct MypageView: View {
                         }
                     }
                 }
+                
+                VStack(spacing: 16) {
+                    Button(action: {
+                        if !store.isLogined {
+                            store.send(.login)
+                        }
+                    }) {
+                        HStack {
+                            Image("google_logo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                            Text("Google로 계속하기")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                    }
+                    .buttonStyle(.plain)
+                    
+                    Button(action: {
+                        if !store.isLogined {
+//                            store.send(.appleLogin)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "apple.logo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                            Text("Apple로 계속하기")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.horizontal)
                 
 //                // 활동 내역 섹션
 //                Section("활동 내역") {
