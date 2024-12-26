@@ -44,6 +44,10 @@ let project = Project(
                     "KAKAO_APP_KEY": .string(SecretConfig.Keys.kakaoAppKey),
                     "KAKAO_API_KEY": .string(SecretConfig.Keys.kakaoAPIKey),
                     "OTHER_LDFLAGS": ["-ObjC"]
+                ],
+                configurations: [
+                    .debug(name: .debug, settings: ["CODE_SIGN_ENTITLEMENTS": "CorkageFinder.entitlements"]),
+                    .release(name: .release, settings: ["CODE_SIGN_ENTITLEMENTS": "CorkageFinder.entitlements"])
                 ]
             )
         ),

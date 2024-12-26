@@ -15,6 +15,7 @@ import GoogleSignIn
 import AppAuth
 import GTMAppAuth
 import Models
+import AuthenticationServices
 
 public struct FirebaseClient {
 
@@ -24,7 +25,8 @@ public struct FirebaseClient {
     public var getApprovedRestaurants: () async throws -> Restaurants
     public var uploadImages: ([UIImage]) async throws -> [String]
     public var deleteImages: ([String]) async throws -> Void
-    public var login: () async throws -> Void
+    public var googleLogin: () async throws -> Void
+    public var appleLogin: () async throws -> Void
     public var logout: () async throws -> Void
     
     // 초기화 상태 체크 함수 추가
@@ -182,7 +184,7 @@ public struct FirebaseClient {
                 }
             }
         },
-        login: { 
+        googleLogin: { 
             
             // 1. Google Sign In 설정
             guard let clientID = FirebaseApp.app()?.options.clientID,
@@ -240,6 +242,62 @@ public struct FirebaseClient {
             
 
         },
+        appleLogin: {
+            try await Self.ensureFirebaseInitialized()
+            let nonce = String.randomNonceString()
+            let appleIDProvider = ASAuthorizationAppleIDProvider()
+            let request = appleIDProvider.createRequest()
+            request.requestedScopes = [.fullName, .email]
+            request.nonce = nonce.sha256()
+            
+            return try await withCheckedThrowingContinuation { continuation in
+                DispatchQueue.main.async {
+                    let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+                    let delegate = SignInWithAppleDelegate { result, error in
+                        if let error = error {
+                            continuation.resume(throwing: error)
+                            return
+                        }
+                        
+                        guard let result = result,
+                              let appleIDCredential = result.credential as? ASAuthorizationAppleIDCredential,
+                              let appleIDToken = appleIDCredential.identityToken,
+                              let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                            continuation.resume(throwing: NSError(domain: "", code: -1,
+                                userInfo: [NSLocalizedDescriptionKey: "Unable to fetch identity token"]))
+                            return
+                        }
+                        
+                        let credential = OAuthProvider.credential(
+                            providerID: AuthProviderID.apple,
+                            idToken: idTokenString,
+                            rawNonce: nonce,
+                            accessToken: nil // 선택적 파라미터
+                        )
+                        
+                        Task {
+                            do {
+                                try await Auth.auth().signIn(with: credential)
+                                continuation.resume(returning: ())
+                            } catch let signInError as NSError {
+                                print("Firebase sign in error: \(signInError.localizedDescription)")
+                                continuation.resume(throwing: signInError)
+                            } catch {
+                                print("Unexpected error: \(error.localizedDescription)")
+                                continuation.resume(throwing: error)
+                            }
+                        }
+                    }
+                    
+                    authorizationController.delegate = delegate
+                    authorizationController.presentationContextProvider = delegate
+                    objc_setAssociatedObject(authorizationController, "delegate", delegate, .OBJC_ASSOCIATION_RETAIN)
+                    
+                    authorizationController.performRequests()
+                }
+            }
+            
+        },
         logout: {
             try Auth.auth().signOut()
             return
@@ -277,7 +335,32 @@ public struct FirebaseClient {
             return images.map { _ in "https://mock-image-url.com/\(UUID().uuidString).jpg" }
         },
         deleteImages: { _ in },
-        login: {  },
+        googleLogin: {  },
+        appleLogin: {  },
         logout: {  }
     )
+    
+    private class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+        private let completion: (ASAuthorization?, Error?) -> Void
+        
+        init(completion: @escaping (ASAuthorization?, Error?) -> Void) {
+            self.completion = completion
+        }
+        
+        func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = scene.windows.first else {
+                fatalError("No window found")
+            }
+            return window
+        }
+        
+        func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+            completion(authorization, nil)
+        }
+        
+        func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+            completion(nil, error)
+        }
+    }
 }

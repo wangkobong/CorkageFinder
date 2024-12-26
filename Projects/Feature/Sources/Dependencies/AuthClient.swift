@@ -11,14 +11,19 @@ import FirebaseModule
 import Models
 
 public struct AuthClient {
-    var login: () async throws -> Void
+    var tryGoogleLogin: () async throws -> Void
+    var tryAppleLogin: () async throws -> Void
     var logout: () async throws -> Void
     
     static let live = Self(
-        login: {
-
-            try await FirebaseClient.live.login()
+        tryGoogleLogin: {
+            try await FirebaseClient.live.googleLogin()
             print("Google 로그인 성공")
+            return
+        },
+        tryAppleLogin: {
+            try await FirebaseClient.live.appleLogin()
+            print("apple 로그인 성공")
             return
         },
         logout: {

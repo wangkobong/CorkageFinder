@@ -59,3 +59,7 @@ public enum HTTPError: Error {
 }
 
 
+public enum LoginType {
+    case google
+    case apple
+}

@@ -40,17 +40,12 @@ public struct MypageView: View {
                         }
                     }
                     .padding(.vertical, 8)
-                    .onTapGesture {
-                        if !store.isLogined {
-                            store.send(.login)
-                        }
-                    }
                 }
                 
                 VStack(spacing: 16) {
                     Button(action: {
                         if !store.isLogined {
-                            store.send(.login)
+                            store.send(.login(.google))
                         }
                     }) {
                         HStack {
@@ -71,7 +66,7 @@ public struct MypageView: View {
                     
                     Button(action: {
                         if !store.isLogined {
-//                            store.send(.appleLogin)
+                            store.send(.login(.apple))
                         }
                     }) {
                         HStack {

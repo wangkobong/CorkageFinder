@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Models
 
 @Reducer
 public struct MypageFeature: Equatable {
@@ -26,7 +27,7 @@ public struct MypageFeature: Equatable {
     }
     
     public enum Action {
-        case login
+        case login(LoginType)
         case logout
         case loginResponse(TaskResult<Void>)
     }
@@ -36,14 +37,19 @@ public struct MypageFeature: Equatable {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .login:
+            case let .login(loginType):
                 print("인증시도")
                 
                 state.isLoading = true
                 return .run { [authClient] send in
                     await send(.loginResponse(
                         TaskResult {
-                            try await authClient.login()
+                            switch loginType {
+                            case .google:
+                                try await authClient.tryGoogleLogin()
+                            case .apple:
+                                try await authClient.tryAppleLogin()
+                            }
                         }
                     ))
                 }

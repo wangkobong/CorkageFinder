@@ -11,7 +11,10 @@ let project = Project(
             bundleId: "io.tuist.Feature",
             deploymentTargets: .iOS("17.5"),
             sources: ["Sources/**"],
-            resources: ["Resources/**"],
+            resources: [
+                "Resources/**",
+                .glob(pattern: "Resources/Assets.xcassets/**") // Assets를 명시적으로 포함
+            ],
             dependencies: [
                 .project(target: "FirebaseModule", path: "../FirebaseModule"),
                 .project(target: "Models", path: "../Models"),
