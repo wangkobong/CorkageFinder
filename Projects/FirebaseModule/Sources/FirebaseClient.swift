@@ -25,8 +25,8 @@ public struct FirebaseClient {
     public var getApprovedRestaurants: () async throws -> Restaurants
     public var uploadImages: ([UIImage]) async throws -> [String]
     public var deleteImages: ([String]) async throws -> Void
-    public var googleLogin: () async throws -> Void
-    public var appleLogin: () async throws -> Void
+    public var googleLogin: () async throws -> UserModel?
+    public var appleLogin: () async throws -> UserModel?
     public var logout: () async throws -> Void
     public var checkAuthState: () async throws -> UserModel?
     
@@ -211,7 +211,6 @@ public struct FirebaseClient {
                           
                           if let error = error {
                               continuation.resume(throwing: error)
-                              return
                           }
                           
                           guard let result = result,
@@ -224,13 +223,30 @@ public struct FirebaseClient {
                               withIDToken: idToken,
                               accessToken: result.user.accessToken.tokenString
                           )
-                          
-                          print("로그인 성공 결과: \(result.user.description)")
-                          
+                                                    
                           Task {
                               do {
-                                  try await Auth.auth().signIn(with: credential)
-                                  continuation.resume(returning: ())
+                                  let authResult = try await Auth.auth().signIn(with: credential)
+                                  let user = authResult.user
+                                  var loginType: String = ""
+                                  let providers = user.providerData.map { profile -> String in
+                                     switch profile.providerID {
+                                     case "google.com": return "구글"
+                                     case "apple.com": return "애플"
+                                     default: return ""
+                                     }
+                                  }.filter { !$0.isEmpty }
+
+                                  loginType = providers.joined()
+                                  let isAdmin = user.email == "wangkobong@gmail.com"
+                                  let userModel = UserModel(name: user.displayName ?? "",
+                                                            imageURL: user.photoURL?.absoluteString ?? "",
+                                                            userEmail: user.email ?? "",
+                                                            phoneNumber: user.phoneNumber ?? "",
+                                                            uid: user.uid,
+                                                            loginType: loginType,
+                                                            isAdmin: isAdmin)
+                                  continuation.resume(returning: userModel)
                               } catch {
                                   continuation.resume(throwing: error)
                               }
@@ -279,7 +295,28 @@ public struct FirebaseClient {
                         Task {
                             do {
                                 try await Auth.auth().signIn(with: credential)
-                                continuation.resume(returning: ())
+                                
+                                let authResult = try await Auth.auth().signIn(with: credential)
+                                let user = authResult.user
+                                var loginType: String = ""
+                                let providers = user.providerData.map { profile -> String in
+                                   switch profile.providerID {
+                                   case "google.com": return "구글"
+                                   case "apple.com": return "애플"
+                                   default: return ""
+                                   }
+                                }.filter { !$0.isEmpty }
+
+                                loginType = providers.joined()
+                                let isAdmin = user.email == "wangkobong@gmail.com"
+                                let userModel = UserModel(name: user.displayName ?? "",
+                                                          imageURL: user.photoURL?.absoluteString ?? "",
+                                                          userEmail: user.email ?? "",
+                                                          phoneNumber: user.phoneNumber ?? "",
+                                                          uid: user.uid,
+                                                          loginType: loginType,
+                                                          isAdmin: isAdmin)
+                                continuation.resume(returning: userModel)
                             } catch let signInError as NSError {
                                 print("Firebase sign in error: \(signInError.localizedDescription)")
                                 continuation.resume(throwing: signInError)
@@ -377,8 +414,8 @@ public struct FirebaseClient {
             return images.map { _ in "https://mock-image-url.com/\(UUID().uuidString).jpg" }
         },
         deleteImages: { _ in },
-        googleLogin: {  },
-        appleLogin: {  },
+        googleLogin: { return nil },
+        appleLogin: { return nil },
         logout: {  },
         checkAuthState: { return nil }
     )

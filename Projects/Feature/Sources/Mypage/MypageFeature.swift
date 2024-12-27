@@ -30,7 +30,8 @@ public struct MypageFeature: Equatable {
         case checkAuthState
         case login(LoginType)
         case logout
-        case loginResponse(TaskResult<Void>)
+        case loginResponse(TaskResult<UserModel?>)
+        case logoutResponse(TaskResult<Void>)
         case checkAuthStateResponse(TaskResult<UserModel?>)
     }
     
@@ -77,7 +78,7 @@ public struct MypageFeature: Equatable {
             case .logout:
                 state.isLoading = true
                 return .run { [authClient] send in
-                    await send(.loginResponse(
+                    await send(.logoutResponse(
                         TaskResult {
                             try await authClient.logout()
                         }
@@ -85,13 +86,23 @@ public struct MypageFeature: Equatable {
                 }
                 
             case let .loginResponse(.success(loginData)):
-                
+                state.loginedUser = loginData
                 return .none
                 
             case let .loginResponse(.failure(error)):
-                
+                state.loginedUser = nil
                 print("로그인실패: \(error)")
                 return .none
+                
+            case let .logoutResponse(.success(logoutDate)):
+                state.loginedUser = nil
+                return .none
+                
+            case let .logoutResponse(.failure(error)):
+                state.loginedUser = nil
+                print("로그아웃 실패: \(error)")
+                return .none
+                
             }
         }
     }
