@@ -9,6 +9,7 @@ import Foundation
 
 public struct UserModel: Codable, Equatable {
     public let name: String
+    public let imageURL: String
     public let userEmail: String
     public let phoneNumber: String
     public let uid: String
@@ -17,6 +18,7 @@ public struct UserModel: Codable, Equatable {
     
     public init(
         name: String,
+        imageURL: String,
         userEmail: String,
         phoneNumber: String,
         uid: String,
@@ -25,6 +27,7 @@ public struct UserModel: Codable, Equatable {
         
     ) {
         self.name = name
+        self.imageURL = imageURL
         self.userEmail = userEmail
         self.phoneNumber = phoneNumber
         self.uid = uid
@@ -35,6 +38,7 @@ public struct UserModel: Codable, Equatable {
 
 extension UserModel {
     public static let preview = UserModel(name: "",
+                                          imageURL: "",
                                           userEmail: "",
                                           phoneNumber: "",
                                           uid: "",

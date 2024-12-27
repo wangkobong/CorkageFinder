@@ -312,6 +312,7 @@ public struct FirebaseClient {
                 - UID: \(user.uid)
                 - 전화번호: \(user.phoneNumber ?? "없음")
                 - 프로필 URL: \(user.photoURL?.absoluteString ?? "없음")
+                - 프로바이더: \(user.providerData ?? [])
                 """)
                 
                 // 이메일 인증 여부
@@ -320,19 +321,20 @@ public struct FirebaseClient {
                 }
                 
                 var loginType: String = ""
+                let providers = user.providerData.map { profile -> String in
+                   switch profile.providerID {
+                   case "google.com": return "구글"
+                   case "apple.com": return "애플"
+                   default: return ""
+                   }
+                }.filter { !$0.isEmpty }
+
+                loginType = providers.joined()
                 
-                // 프로바이더 정보 (Google, Apple 등)
-                for profile in user.providerData {
-                    print("로그인 방식: \(profile.providerID)")
-                    if profile.providerID == "google.com" {
-                        loginType = "구글"
-                    } else if profile.providerID == "apple.com" {
-                        loginType = "애플"
-                    }
-                }
                 let isAdmin = user.email == "wangkobong@gmail.com"
                 
                 let userModel = UserModel(name: user.displayName ?? "",
+                                          imageURL: user.photoURL?.absoluteString ?? "",
                                           userEmail: user.email ?? "",
                                           phoneNumber: user.phoneNumber ?? "",
                                           uid: user.uid,

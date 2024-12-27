@@ -7,12 +7,24 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Kingfisher
 
+@MainActor
 public struct MypageView: View {
     let store: StoreOf<MypageFeature>
     
     public init(store: StoreOf<MypageFeature>) {
         self.store = store
+    }
+    
+    private var loginTypeText: String {
+        guard let type = store.loginedUser?.loginType else { return "" }
+        
+        switch type {
+        case "구글": return "Google 계정"
+        case "애플": return "Apple 계정"
+        default: return "Google/Apple 계정"
+        }
     }
 
     public var body: some View {
@@ -23,6 +35,7 @@ public struct MypageView: View {
                 } else {
                     unauthenticatedProfileView
                 }
+                Spacer()
             }
             .navigationTitle("마이페이지")
             .onAppear {
@@ -31,99 +44,6 @@ public struct MypageView: View {
         }
     }
     
-    private var authenticatedProfileView: some View {
-        VStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(store.loginedUser?.name ?? "이름 정보 없음")
-                    .font(.headline)
-                Text(store.loginedUser?.userEmail ?? "유저 이메일 없음")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                Text(store.loginedUser?.loginType ?? "")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
-            
-            //                // 활동 내역 섹션
-            //                Section("활동 내역") {
-            //                    NavigationLink {
-            //                        Text("내가 등록한 레스토랑")
-            //                    } label: {
-            //                        Label("내가 등록한 레스토랑", systemImage: "square.and.pencil")
-            //                    }
-            //
-            //                    NavigationLink {
-            //                        Text("찜한 레스토랑")
-            //                    } label: {
-            //                        Label("찜한 레스토랑", systemImage: "heart.fill")
-            //                    }
-            //
-            //                    NavigationLink {
-            //                        Text("최근 본 레스토랑")
-            //                    } label: {
-            //                        Label("최근 본 레스토랑", systemImage: "clock.fill")
-            //                    }
-            //
-            //                    NavigationLink {
-            //                        Text("리뷰 작성 내역")
-            //                    } label: {
-            //                        Label("리뷰 작성 내역", systemImage: "star.fill")
-            //                    }
-            //                }
-            //
-            //                // 계정 설정 섹션
-            //                Section("계정 설정") {
-            //                    NavigationLink {
-            //                        Text("알림 설정")
-            //                    } label: {
-            //                        Label("알림 설정", systemImage: "bell.fill")
-            //                    }
-            //
-            //                    NavigationLink {
-            //                        Text("개인정보 수정")
-            //                    } label: {
-            //                        Label("개인정보 수정", systemImage: "person.fill")
-            //                    }
-            //
-            //                    NavigationLink {
-            //                        Text("비밀번호 변경")
-            //                    } label: {
-            //                        Label("비밀번호 변경", systemImage: "lock.fill")
-            //                    }
-            //                }
-            //
-            //                // 기타 섹션
-            //                Section("기타") {
-            //                    NavigationLink {
-            //                        Text("고객센터")
-            //                    } label: {
-            //                        Label("고객센터", systemImage: "questionmark.circle.fill")
-            //                    }
-            //
-            //                    NavigationLink {
-            //                        Text("공지사항")
-            //                    } label: {
-            //                        Label("공지사항", systemImage: "bell.badge.fill")
-            //                    }
-            //
-            //                    NavigationLink {
-            //                        Text("약관 및 정책")
-            //                    } label: {
-            //                        Label("약관 및 정책", systemImage: "doc.text.fill")
-            //                    }
-            //
-            //                    HStack {
-            //                        Label("앱 버전", systemImage: "info.circle.fill")
-            //                        Spacer()
-            //                        Text("1.0.0")
-            //                            .foregroundColor(.gray)
-            //                    }
-            //                }
-            //
-            
-            logoutSection
-        }
-    }
     
     private var unauthenticatedProfileView: some View {
         VStack {
@@ -178,17 +98,149 @@ public struct MypageView: View {
         .padding(.horizontal)
     }
     
-    private var logoutSection: some View {
-        Section {
-            Button(role: .destructive) {
-                store.send(.logout)
-            } label: {
-                Text("로그아웃")
-            }
-        }
-    }
 }
 
 //#Preview {
 //    MypageView()
 //}
+
+/// 로그인 시
+extension MypageView {
+    private var authenticatedProfileView: some View {
+        VStack {
+            // 프로필 헤더
+            profileSection
+            
+            // 메뉴 목록
+            loginedMenuSection
+            Divider()
+            logoutSection
+        }
+        
+    }
+    
+    private var logoutSection: some View {
+        Button(action: {
+            store.send(.logout)
+        }) {
+            HStack {
+                Image(systemName: "rectangle.portrait.and.arrow.right")
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(.red)
+                
+                Text("로그아웃")
+                    .foregroundColor(.red)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+        }
+    }
+    
+    @MainActor
+    private var profileSection: some View {
+        HStack(spacing: 15) {
+            // 프로필 이미지
+            Group {
+                if let imageURL = store.loginedUser?.imageURL,
+                   !imageURL.isEmpty,
+                   let url = URL(string: imageURL) {
+                    KFImage(url)
+                        .scaledToFill()
+                        .frame(width: 80, height: 80)
+                        .clipShape(Circle())
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                        .overlay(
+                            Circle()
+                                .stroke(Color.white, lineWidth: 2)
+                        )
+                } else {
+                    Circle()
+                        .fill(Color(.systemGray5))
+                        .frame(width: 80, height: 80)
+                        .overlay(
+                            Image(systemName: "person.fill")
+                                .foregroundColor(.gray)
+                                .font(.system(size: 40))
+                        )
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                }
+            }
+            
+            // 사용자 정보
+            VStack(alignment: .leading, spacing: 6) {
+                Text(store.loginedUser?.name ?? "이름 정보 없음")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                
+                Text(store.loginedUser?.userEmail ?? "유저 이메일 없음")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                
+                HStack(spacing: 6) {
+                    Group {
+                        if let loginType = store.loginedUser?.loginType {
+                            switch loginType {
+                            case "구글":
+                                Image("google_logo")
+                            case "애플":
+                                Image(systemName: "applelogo")
+                            case "구글애플":
+                                HStack {
+                                    Image("google_logo")
+                                    Image(systemName: "applelogo")
+                                }
+                            case "애플구글":
+                                HStack {
+                                    Image(systemName: "applelogo")
+                                    Image("google_logo")
+                                }
+                            default:
+                                EmptyView()
+                            }
+                        }
+                    }
+                    Text(loginTypeText)
+                        .font(.caption)
+                }
+                .foregroundColor(.gray)
+            }
+            
+            Spacer()
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+    }
+    
+    private var loginedMenuSection: some View {
+        VStack(spacing: 0) {
+            MypageMenuRow(icon: "bell", title: "알림 설정")
+            Divider()
+            MypageMenuRow(icon: "person.text.rectangle", title: "계정 관리")
+            Divider()
+            MypageMenuRow(icon: "doc.text", title: "이용 약관")
+            Divider()
+            MypageMenuRow(icon: "lock.shield", title: "개인정보 처리방침")
+            if store.loginedUser?.isAdmin ?? false {
+                Divider()
+                MypageMenuRow(icon: "list.bullet", title: "신청 목록 확인")
+                    .onTapGesture {
+                        print("신청 목록 확인")
+                    }
+            }
+        }
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+    }
+}
+
+
+/// 비 로그인 시
+extension MypageView {
+    
+}
+
