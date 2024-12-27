@@ -62,4 +62,11 @@ public enum HTTPError: Error {
 public enum LoginType {
     case google
     case apple
+    
+    public var title: String {
+        switch self {
+        case .google: return "구글"
+        case .apple: return "애플"
+        }
+    }
 }

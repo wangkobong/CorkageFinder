@@ -21,7 +21,7 @@ public struct MypageFeature: Equatable {
     public struct State: Equatable {
         public var isLoading = false
         public var isTimerRunning = false
-        public var isLogined = false
+        public var loginedUser: UserModel?
         
         public init() {}
     }
@@ -31,7 +31,7 @@ public struct MypageFeature: Equatable {
         case login(LoginType)
         case logout
         case loginResponse(TaskResult<Void>)
-        case checkAuthStateResponse(TaskResult<Bool>)
+        case checkAuthStateResponse(TaskResult<UserModel?>)
     }
     
     public init() {}
@@ -48,9 +48,9 @@ public struct MypageFeature: Equatable {
                         }
                     ))
                 }
-            case .checkAuthStateResponse(.success(let isLoggedIn)):
+            case .checkAuthStateResponse(.success(let user)):
                 state.isLoading = false
-                state.isLogined = isLoggedIn
+                state.loginedUser = user
                 return .none
                 
             case .checkAuthStateResponse(.failure(let error)):

@@ -28,7 +28,7 @@ public struct FirebaseClient {
     public var googleLogin: () async throws -> Void
     public var appleLogin: () async throws -> Void
     public var logout: () async throws -> Void
-    public var checkAuthState: () async throws -> Bool
+    public var checkAuthState: () async throws -> UserModel?
     
     // 초기화 상태 체크 함수 추가
     private static func ensureFirebaseInitialized() throws {
@@ -319,12 +319,28 @@ public struct FirebaseClient {
                     print("이메일 인증됨")
                 }
                 
+                var loginType: String = ""
+                
                 // 프로바이더 정보 (Google, Apple 등)
                 for profile in user.providerData {
                     print("로그인 방식: \(profile.providerID)")
+                    if profile.providerID == "google.com" {
+                        loginType = "구글"
+                    } else if profile.providerID == "apple.com" {
+                        loginType = "애플"
+                    }
                 }
+                let isAdmin = user.email == "wangkobong@gmail.com"
+                
+                let userModel = UserModel(name: user.displayName ?? "",
+                                          userEmail: user.email ?? "",
+                                          phoneNumber: user.phoneNumber ?? "",
+                                          uid: user.uid,
+                                          loginType: loginType,
+                                          isAdmin: isAdmin)
+                return userModel
             }
-            return Auth.auth().currentUser != nil
+            return nil
         }
     )
     
@@ -362,7 +378,7 @@ public struct FirebaseClient {
         googleLogin: {  },
         appleLogin: {  },
         logout: {  },
-        checkAuthState: { return true }
+        checkAuthState: { return nil }
     )
     
     private class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {

@@ -14,7 +14,7 @@ public struct AuthClient {
     var tryGoogleLogin: () async throws -> Void
     var tryAppleLogin: () async throws -> Void
     var logout: () async throws -> Void
-    var isLogin: () async throws -> Bool
+    var isLogin: () async throws -> UserModel?
     
     static let live = Self(
         tryGoogleLogin: {

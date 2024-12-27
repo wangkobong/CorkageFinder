@@ -18,7 +18,7 @@ public struct MypageView: View {
     public var body: some View {
         NavigationView {
             VStack {
-                if store.isLogined {
+                if store.loginedUser != nil {
                     authenticatedProfileView
                 } else {
                     unauthenticatedProfileView
@@ -34,9 +34,12 @@ public struct MypageView: View {
     private var authenticatedProfileView: some View {
         VStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text("사용자 닉네임")
+                Text(store.loginedUser?.name ?? "이름 정보 없음")
                     .font(.headline)
-                Text("user@email.com")
+                Text(store.loginedUser?.userEmail ?? "유저 이메일 없음")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                Text(store.loginedUser?.loginType ?? "")
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
@@ -124,13 +127,7 @@ public struct MypageView: View {
     
     private var unauthenticatedProfileView: some View {
         VStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("사용자 닉네임")
-                    .font(.headline)
-                Text("user@email.com")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
+
             
             loginButtonSection
             

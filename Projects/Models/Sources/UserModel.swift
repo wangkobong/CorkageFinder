@@ -10,28 +10,25 @@ import Foundation
 public struct UserModel: Codable, Equatable {
     public let name: String
     public let userEmail: String
-    public let displayName: String
     public let phoneNumber: String
     public let uid: String
-    public let providerID: String
+    public let loginType: String
     public let isAdmin: Bool
     
     public init(
         name: String,
         userEmail: String,
-        displayName: String,
         phoneNumber: String,
         uid: String,
-        providerID: String,
+        loginType: String,
         isAdmin: Bool
         
     ) {
         self.name = name
         self.userEmail = userEmail
-        self.displayName = displayName
         self.phoneNumber = phoneNumber
         self.uid = uid
-        self.providerID = providerID
+        self.loginType = loginType
         self.isAdmin = isAdmin
     }
 }
@@ -39,9 +36,8 @@ public struct UserModel: Codable, Equatable {
 extension UserModel {
     public static let preview = UserModel(name: "",
                                           userEmail: "",
-                                          displayName: "",
                                           phoneNumber: "",
                                           uid: "",
-                                          providerID: "",
+                                          loginType: "",
                                           isAdmin: true)
 }
