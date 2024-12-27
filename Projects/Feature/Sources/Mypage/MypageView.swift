@@ -43,61 +43,6 @@ public struct MypageView: View {
             }
         }
     }
-    
-    
-    private var unauthenticatedProfileView: some View {
-        VStack {
-
-            
-            loginButtonSection
-            
-        }
-    }
-    
-    private var loginButtonSection: some View {
-        VStack(spacing: 16) {
-            Button(action: {
-                store.send(.login(.google))
-            }) {
-                HStack {
-                    Image("google_logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    Text("Google로 계속하기")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    Spacer()
-                }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(12)
-            }
-            .buttonStyle(.plain)
-            
-            Button(action: {
-                store.send(.login(.apple))
-
-            }) {
-                HStack {
-                    Image(systemName: "apple.logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    Text("Apple로 계속하기")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    Spacer()
-                }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(12)
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(.horizontal)
-    }
-    
 }
 
 //#Preview {
@@ -238,9 +183,105 @@ extension MypageView {
     }
 }
 
-
 /// 비 로그인 시
 extension MypageView {
     
+    private var unauthenticatedProfileView: some View {
+        VStack {
+            // 상단 이미지/텍스트 섹션
+            topSection
+
+            // 로그인 버튼
+            loginButtonSection
+            
+            // 추가 정보 섹션
+            termsSection
+            
+        }
+    }
+    
+    private var topSection: some View {
+        VStack(spacing: 12) {
+            Circle()
+                .fill(Color(.systemGray5))
+                .frame(width: 100, height: 100)
+                .overlay(
+                    Image(systemName: "person.fill")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 50))
+                )
+                .shadow(color: Color.black.opacity(0.1), radius: 5)
+            
+            VStack(spacing: 8) {
+                Text("로그인이 필요합니다")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Text("로그인하고 더 많은 기능을 이용해보세요")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .padding(.vertical, 20)
+    }
+    
+    private var loginButtonSection: some View {
+        VStack(spacing: 16) {
+            Button(action: {
+                store.send(.login(.google))
+            }) {
+                HStack {
+                    Image("google_logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                    Text("Google로 계속하기")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+            }
+            .buttonStyle(.plain)
+            
+            Button(action: {
+                store.send(.login(.apple))
+
+            }) {
+                HStack {
+                    Image(systemName: "apple.logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                    Text("Apple로 계속하기")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal)
+    }
+    
+    private var termsSection: some View {
+        VStack(spacing: 16) {
+            Button(action: {
+                // 이용약관 액션
+            }) {
+                Text("이용약관 및 개인정보처리방침")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .underline()
+            }
+        }
+        .padding(.top, 12)
+    }
 }
 
