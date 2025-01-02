@@ -11,7 +11,7 @@ import Kingfisher
 
 @MainActor
 public struct MypageView: View {
-    let store: StoreOf<MypageFeature>
+    @Bindable var store: StoreOf<MypageFeature>
     
     public init(store: StoreOf<MypageFeature>) {
         self.store = store
@@ -28,7 +28,7 @@ public struct MypageView: View {
     }
 
     public var body: some View {
-        NavigationView {
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             VStack {
                 if store.loginedUser != nil {
                     authenticatedProfileView
@@ -41,8 +41,15 @@ public struct MypageView: View {
             .onAppear {
                 store.send(.checkAuthState)
             }
+
+        } destination: { store in
+            switch store.case {
+            case let .approvalWatingList(state):
+                ApprovalWaitingView(store: state)
+            }
         }
     }
+    
 }
 
 //#Preview {
@@ -62,25 +69,6 @@ extension MypageView {
             logoutSection
         }
         
-    }
-    
-    private var logoutSection: some View {
-        Button(action: {
-            store.send(.logout)
-        }) {
-            HStack {
-                Image(systemName: "rectangle.portrait.and.arrow.right")
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(.red)
-                
-                Text("로그아웃")
-                    .foregroundColor(.red)
-                
-                Spacer()
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 12)
-        }
     }
     
     @MainActor
@@ -173,7 +161,8 @@ extension MypageView {
                 Divider()
                 MypageMenuRow(icon: "list.bullet", title: "신청 목록 확인")
                     .onTapGesture {
-                        print("신청 목록 확인")
+                        print("클릭됨")
+                        store.send(.tapToApprovalWaitingList)
                     }
             }
         }
@@ -181,6 +170,26 @@ extension MypageView {
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
+    
+    private var logoutSection: some View {
+        Button(action: {
+            store.send(.logout)
+        }) {
+            HStack {
+                Image(systemName: "rectangle.portrait.and.arrow.right")
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(.red)
+                
+                Text("로그아웃")
+                    .foregroundColor(.red)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+        }
+    }
+
 }
 
 /// 비 로그인 시

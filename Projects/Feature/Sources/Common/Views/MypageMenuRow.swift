@@ -12,26 +12,22 @@ struct MypageMenuRow: View {
    let title: String
    
    var body: some View {
-       Button(action: {
-           // 메뉴 액션
-       }) {
-           HStack {
-               Image(systemName: icon)
-                   .frame(width: 24, height: 24)
-                   .foregroundColor(.primary)
-               
-               Text(title)
-                   .foregroundColor(.primary)
-               
-               Spacer()
-               
-               Image(systemName: "chevron.right")
-                   .foregroundColor(.gray)
-                   .font(.system(size: 14))
-           }
-           .padding(.horizontal)
-           .padding(.vertical, 12)
+       HStack {
+           Image(systemName: icon)
+               .frame(width: 24, height: 24)
+               .foregroundColor(.primary)
+           
+           Text(title)
+               .foregroundColor(.primary)
+           
+           Spacer()
+           
+           Image(systemName: "chevron.right")
+               .foregroundColor(.gray)
+               .font(.system(size: 14))
        }
+       .padding(.horizontal)
+       .padding(.vertical, 12)
    }
 }
 

@@ -23,6 +23,8 @@ public struct MypageFeature: Equatable {
         public var isTimerRunning = false
         public var loginedUser: UserModel?
         
+        public var path = StackState<Path.State>()
+
         public init() {}
     }
     
@@ -33,6 +35,14 @@ public struct MypageFeature: Equatable {
         case loginResponse(TaskResult<UserModel?>)
         case logoutResponse(TaskResult<Void>)
         case checkAuthStateResponse(TaskResult<UserModel?>)
+        case tapToApprovalWaitingList
+        
+        case path(StackActionOf<Path>)
+    }
+    
+    @Reducer(state: .equatable)
+    public enum Path {
+        case approvalWatingList(ApprovalWaitingFeature)
     }
     
     public init() {}
@@ -102,8 +112,20 @@ public struct MypageFeature: Equatable {
                 state.loginedUser = nil
                 print("로그아웃 실패: \(error)")
                 return .none
+            
+            case .tapToApprovalWaitingList:
+                state.path.append(.approvalWatingList(ApprovalWaitingFeature.State()))
+                return .none
+                
+            case .path(.popFrom(id: _)):
+                return .none
+            case .path(.push(id: _, state: _)):
+                return .none
+            case .path(.element(id: _, action: let action)):
+                return .none
                 
             }
         }
+        .forEach(\.path, action: \.path)
     }
 }
