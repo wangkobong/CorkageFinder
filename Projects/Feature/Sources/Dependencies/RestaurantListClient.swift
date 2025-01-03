@@ -8,18 +8,14 @@
 import Foundation
 import ComposableArchitecture
 import Models
+import FirebaseModule
 
 public struct RestaurantListClient {
     var fetch: () async throws -> Restaurants
     
     static let live = Self {
-        guard let url = Bundle.main.url(forResource: "RestaurantsDummy", withExtension: "json"),
-              let data = try? Data(contentsOf: url) else {
-            throw HTTPError.invalidURL
-        }
-        
-        let decoder = JSONDecoder()
-        return try decoder.decode(Restaurants.self, from: data)
+        let data = try await FirebaseClient.live.getApprovedRestaurants(.approved)
+        return data
     }
 }
 

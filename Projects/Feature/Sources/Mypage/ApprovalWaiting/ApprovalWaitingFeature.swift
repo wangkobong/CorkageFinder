@@ -24,12 +24,21 @@ public struct ApprovalWaitingFeature: Equatable {
         public var isTimerRunning = false
         public var pendingRestaurants: [RestaurantCard] = []
 
+        public var path = StackState<Path.State>()
+
         public init() {}
     }
     
     public enum Action {
         case fetchPendingRestaurants
         case fetchPendingRestaurantsResponse(TaskResult<Restaurants>)
+        case path(StackActionOf<Path>)
+        case restaurantDetailTap(RestaurantCard)
+    }
+    
+    @Reducer(state: .equatable)
+    public enum Path {
+        case restaurantDetail(RestaurantDetailFeature)
     }
     
     public init() {}
@@ -53,7 +62,19 @@ public struct ApprovalWaitingFeature: Equatable {
             case let .fetchPendingRestaurantsResponse(.failure(error)):
                 print("페치 실패: \(error)")
                 return .none
+                
+            case let .restaurantDetailTap(restaurant):
+                state.path.append(.restaurantDetail(RestaurantDetailFeature.State(restaurant: restaurant)))
+                return .none
+            case .path(.popFrom(id: _)):
+                return .none
+
+            case .path(.push(id: _, state: _)):
+                return .none
+            case .path(.element(id: let id, action: let action)):
+                return .none
             }
         }
+        .forEach(\.path, action: \.path)
     }
 }

@@ -11,7 +11,7 @@ import ComposableArchitecture
 
 struct ApprovalWaitingView: View {
     
-    let store: StoreOf<ApprovalWaitingFeature>
+    @Bindable var store: StoreOf<ApprovalWaitingFeature>
     
     public init(store: StoreOf<ApprovalWaitingFeature>) {
         self.store = store
@@ -22,6 +22,9 @@ struct ApprovalWaitingView: View {
             ForEach(store.pendingRestaurants, id: \.address) { restaurant in
                 PendingListRowView(restaurant: restaurant)
                     .padding(.horizontal)
+                    .onTapGesture {
+                        store.send(.restaurantDetailTap(restaurant))
+                    }
             }
             Spacer()
         }
