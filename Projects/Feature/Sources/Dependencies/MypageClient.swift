@@ -1,8 +1,8 @@
 //
-//  MapClient.swift
+//  MypageClient.swift
 //  Feature
 //
-//  Created by sungyeon on 12/11/24.
+//  Created by sungyeon on 1/3/25.
 //
 
 import Foundation
@@ -10,13 +10,13 @@ import ComposableArchitecture
 import FirebaseModule
 import Models
 
-public struct MapClient {
-    var fetchRestaurants: () async throws -> Restaurants
+public struct MypageClient {
+    var fetchPendingRestaurants: () async throws -> Restaurants
     var test: () async throws -> Void
 
     static let live = Self(
-        fetchRestaurants: {
-            let data = try await FirebaseClient.live.getApprovedRestaurants(.approved)
+        fetchPendingRestaurants: {
+            let data = try await FirebaseClient.live.getApprovedRestaurants(.pending)
             return data
         },
         test: {
@@ -32,14 +32,14 @@ public struct MapClient {
 }
 
 // DependencyKey 준수
-extension MapClient: DependencyKey {
+extension MypageClient: DependencyKey {
    public static let liveValue = Self.live
 }
 
 // DependencyValues extension
 public extension DependencyValues {
-   var mapClient: MapClient {
-       get { self[MapClient.self] }
-       set { self[MapClient.self] = newValue }
+   var mypageClient: MypageClient {
+       get { self[MypageClient.self] }
+       set { self[MypageClient.self] = newValue }
    }
 }

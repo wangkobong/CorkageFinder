@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Models
 import ComposableArchitecture
 
 struct ApprovalWaitingView: View {
@@ -17,7 +18,17 @@ struct ApprovalWaitingView: View {
     }
 
     var body: some View {
-        Text("승인대기중")
+        LazyVStack(spacing: 12) {
+            ForEach(store.pendingRestaurants, id: \.address) { restaurant in
+                PendingListRowView(restaurant: restaurant)
+                    .padding(.horizontal)
+            }
+            Spacer()
+        }
+        .navigationTitle("신청 대기 목록")
+        .onAppear {
+            store.send(.fetchPendingRestaurants)
+        }
     }
 }
 

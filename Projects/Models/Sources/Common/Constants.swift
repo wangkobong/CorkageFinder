@@ -70,3 +70,28 @@ public enum LoginType {
         }
     }
 }
+
+public enum RestaurantState {
+    case pending
+    case approved
+    case requestModification
+    case requestDeletion
+    
+    public var title: String {
+        switch self {
+        case .pending: return "승인대기중"
+        case .approved: return "승인완료"
+        case .requestModification: return "수정요청"
+        case .requestDeletion: return "삭제요청"
+        }
+    }
+    
+    public var DBName: String {
+        switch self {
+        case .pending: return "pending"
+        case .approved: return "approved"
+        case .requestModification: return "requestModification"
+        case .requestDeletion: return "requestDeletion"
+        }
+    }
+}

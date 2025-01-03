@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import Models
+import FirebaseModule
 
 @Reducer
 public struct ApprovalWaitingFeature: Equatable {
@@ -15,16 +16,20 @@ public struct ApprovalWaitingFeature: Equatable {
         return true
     }
     
+    @Dependency(\.mypageClient) var mypageClient
+    
     @ObservableState
     public struct State: Equatable {
         public var isLoading = false
         public var isTimerRunning = false
+        public var pendingRestaurants: [RestaurantCard] = []
 
         public init() {}
     }
     
     public enum Action {
-        case test
+        case fetchPendingRestaurants
+        case fetchPendingRestaurantsResponse(TaskResult<Restaurants>)
     }
     
     public init() {}
@@ -32,16 +37,22 @@ public struct ApprovalWaitingFeature: Equatable {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .test:
+            case .fetchPendingRestaurants:
                 state.isLoading = true
+                return .run { [mypageClient] send in
+                    await send(.fetchPendingRestaurantsResponse(
+                        TaskResult {
+                            try await mypageClient.fetchPendingRestaurants()
+                        }
+                    ))
+                }
+            case let .fetchPendingRestaurantsResponse(.success(response)):
+                state.pendingRestaurants = response.restaurants
                 return .none
-//                return .run { [authClient] send in
-//                    await send(.checkAuthStateResponse(
-//                        TaskResult {
-//                            try await authClient.isLogin()
-//                        }
-//                    ))
-//                }
+                
+            case let .fetchPendingRestaurantsResponse(.failure(error)):
+                print("페치 실패: \(error)")
+                return .none
             }
         }
     }

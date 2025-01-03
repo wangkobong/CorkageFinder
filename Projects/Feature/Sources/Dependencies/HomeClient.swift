@@ -14,7 +14,7 @@ public struct HomeClient {
     var fetch: () async throws -> HomeData
     
     static let live = Self {
-        let data = try await FirebaseClient.live.getApprovedRestaurants()
+        let data = try await FirebaseClient.live.getApprovedRestaurants(.approved)
         
         // 콜키지 무료인 식당들 필터링
         let corkageFreeRestaurants = data.restaurants.filter { $0.isCorkageFree }

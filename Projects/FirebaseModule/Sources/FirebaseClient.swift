@@ -22,7 +22,7 @@ public struct FirebaseClient {
     public var configure: () -> Void
     public var addRestaurants: (RestaurantCard) async throws -> String
     public var getDocument: () async throws -> Void
-    public var getApprovedRestaurants: () async throws -> Restaurants
+    public var getApprovedRestaurants: (RestaurantState) async throws -> Restaurants
     public var uploadImages: ([UIImage]) async throws -> [String]
     public var deleteImages: ([String]) async throws -> Void
     public var googleLogin: () async throws -> UserModel?
@@ -67,7 +67,7 @@ public struct FirebaseClient {
             let db = Firestore.firestore()
 
             do {
-                let ref = try await db.collection("approved").addDocument(data: [
+                let ref = try await db.collection("pending").addDocument(data: [
                     "imageURLs": data.imageURLs,
                     "name": data.name,
                     "category": data.category.rawValue,  // enum은 rawValue로 저장
@@ -104,11 +104,11 @@ public struct FirebaseClient {
                 print("Error getting documents: \(error)")
             }
         },
-        getApprovedRestaurants: {
+        getApprovedRestaurants: { state in
             try await Self.ensureFirebaseInitialized()
             let db = Firestore.firestore()
             
-            let snapshot = try await db.collection("approved").getDocuments()
+            let snapshot = try await db.collection(state.DBName).getDocuments()
             
             let restaurantCards = try snapshot.documents.map { document in
                 let data = document.data()
@@ -387,7 +387,7 @@ public struct FirebaseClient {
         configure: { },
         addRestaurants: { _ in return "mock-document-id" },
         getDocument: { },
-        getApprovedRestaurants: {
+        getApprovedRestaurants: { state in 
             return Restaurants(restaurants: [
                 RestaurantCard(
                     imageURLs: ["https://firebasestorage.googleapis.com:443/v0/b/corkagefinder-90e71.firebasestorage.app/o/restaurants%2FA48B22B2-D96C-40AC-99BE-B851F1CA26C6.jpg?alt=media&token=8480042f-1bcf-42ba-be45-b69831416e0c", "https://firebasestorage.googleapis.com:443/v0/b/corkagefinder-90e71.firebasestorage.app/o/restaurants%2F4A3A6D85-339F-4E56-92E6-34ABE579D35E.jpg?alt=media&token=2dfca8ea-9d33-45a1-ac13-b0740e01004f", "https://firebasestorage.googleapis.com:443/v0/b/corkagefinder-90e71.firebasestorage.app/o/restaurants%2F0D69E80E-1852-4093-A06A-F2260BF9CFF9.jpg?alt=media&token=b147ea65-67b3-4948-b26c-f2d0c8ff5ec5"],
