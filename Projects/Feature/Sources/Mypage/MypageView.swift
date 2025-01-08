@@ -41,6 +41,8 @@ public struct MypageView: View {
             .onAppear {
                 store.send(.checkAuthState)
             }
+            .loadingOverlay(isLoading: store.isLoading)
+            
             
         } destination: { store in
             switch store.case {

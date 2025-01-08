@@ -34,6 +34,7 @@ public struct HomeView: View {
                     .padding(.bottom)
 //                Spacer()
             }
+            .loadingOverlay(isLoading: store.isLoading)
             .task {
                 await store.send(.fetchHomeData).finish()
             }

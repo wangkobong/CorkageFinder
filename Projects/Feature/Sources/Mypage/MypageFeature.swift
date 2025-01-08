@@ -61,8 +61,8 @@ public struct MypageFeature: Equatable {
                     ))
                 }
             case .checkAuthStateResponse(.success(let user)):
-                state.isLoading = false
                 state.loginedUser = user
+                state.isLoading = false
                 return .none
                 
             case .checkAuthStateResponse(.failure(let error)):
@@ -97,19 +97,23 @@ public struct MypageFeature: Equatable {
                 }
                 
             case let .loginResponse(.success(loginData)):
+                state.isLoading = false
                 state.loginedUser = loginData
                 return .none
                 
             case let .loginResponse(.failure(error)):
+                state.isLoading = false
                 state.loginedUser = nil
                 print("로그인실패: \(error)")
                 return .none
                 
             case let .logoutResponse(.success(logoutDate)):
+                state.isLoading = false
                 state.loginedUser = nil
                 return .none
                 
             case let .logoutResponse(.failure(error)):
+                state.isLoading = false
                 state.loginedUser = nil
                 print("로그아웃 실패: \(error)")
                 return .none

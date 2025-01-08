@@ -67,10 +67,11 @@ public struct HomeFeature: Equatable {
             case let .fetchHomeDataResponse(.success(homeData)):
                 state.recommenderRestaurants = homeData.recommenderRestaurants
                 state.corkageFreeRestaurants = homeData.corkageFreerestaurants
+                state.isLoading = false
                 return .none
                 
             case let .fetchHomeDataResponse(.failure(error)):
-                
+                state.isLoading = false
                 print("페치 실패: \(error)")
                 return .none
             case let .searchTextChanged(text):
