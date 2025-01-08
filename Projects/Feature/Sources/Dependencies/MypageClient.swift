@@ -12,12 +12,17 @@ import Models
 
 public struct MypageClient {
     var fetchPendingRestaurants: () async throws -> Restaurants
+    var approveRestaurant: (RestaurantCard) async throws -> Bool
     var test: () async throws -> Void
 
     static let live = Self(
         fetchPendingRestaurants: {
             let data = try await FirebaseClient.live.getApprovedRestaurants(.pending)
             return data
+        },
+        approveRestaurant: { restaurant in
+            let result = try await FirebaseClient.live.approveRestaurant(restaurant)
+            return result
         },
         test: {
             guard let url = Bundle.main.url(forResource: "RestaurantsDummy", withExtension: "json"),

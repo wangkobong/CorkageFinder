@@ -43,6 +43,7 @@ public struct MypageFeature: Equatable {
     @Reducer(state: .equatable)
     public enum Path {
         case approvalWatingList(ApprovalWaitingFeature)
+        case restaurantDetail(RestaurantDetailFeature)
     }
     
     public init() {}
@@ -121,9 +122,14 @@ public struct MypageFeature: Equatable {
                 return .none
             case .path(.push(id: _, state: _)):
                 return .none
-            case .path(.element(id: _, action: let action)):
-                return .none
-                
+            case let .path(.element(_, action)):
+                switch action {
+                case let .approvalWatingList(.restaurantDetailTap(restaurant)):
+                    state.path.append(.restaurantDetail(RestaurantDetailFeature.State(restaurant: restaurant)))
+                    return .none
+                default:
+                    return .none
+                }
             }
         }
         .forEach(\.path, action: \.path)

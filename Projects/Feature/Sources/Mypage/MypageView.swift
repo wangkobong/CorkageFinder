@@ -26,7 +26,7 @@ public struct MypageView: View {
         default: return "Google/Apple 계정"
         }
     }
-
+    
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             VStack {
@@ -41,11 +41,13 @@ public struct MypageView: View {
             .onAppear {
                 store.send(.checkAuthState)
             }
-
+            
         } destination: { store in
             switch store.case {
             case let .approvalWatingList(state):
                 ApprovalWaitingView(store: state)
+            case let .restaurantDetail(state):
+                RestaurantDetailView(store: state)
             }
         }
     }

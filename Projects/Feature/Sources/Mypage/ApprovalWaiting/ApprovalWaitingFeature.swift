@@ -34,6 +34,8 @@ public struct ApprovalWaitingFeature: Equatable {
         case fetchPendingRestaurantsResponse(TaskResult<Restaurants>)
         case path(StackActionOf<Path>)
         case restaurantDetailTap(RestaurantCard)
+        case approve(RestaurantCard)
+        case approveRestaurantResponse(TaskResult<Bool>)
     }
     
     @Reducer(state: .equatable)
@@ -63,12 +65,29 @@ public struct ApprovalWaitingFeature: Equatable {
                 print("페치 실패: \(error)")
                 return .none
                 
+            case let .approve(restaurant):
+                state.isLoading = true
+                return .run { [mypageClient] send in
+                    await send(.approveRestaurantResponse(
+                        TaskResult {
+                            try await mypageClient.approveRestaurant(restaurant)
+                        }
+                    ))
+                }
+                
+            case let .approveRestaurantResponse(.success(response)):
+                if response == true {
+                    return .send(.fetchPendingRestaurants)
+                }
+                return .none
+            case let .approveRestaurantResponse(.failure(error)):
+                print("페치 실패: \(error)")
+                return .none
             case let .restaurantDetailTap(restaurant):
                 state.path.append(.restaurantDetail(RestaurantDetailFeature.State(restaurant: restaurant)))
                 return .none
             case .path(.popFrom(id: _)):
                 return .none
-
             case .path(.push(id: _, state: _)):
                 return .none
             case .path(.element(id: let id, action: let action)):

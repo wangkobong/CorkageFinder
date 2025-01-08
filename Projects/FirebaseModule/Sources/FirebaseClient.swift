@@ -19,7 +19,6 @@ import AuthenticationServices
 
 public struct FirebaseClient {
 
-    public var configure: () -> Void
     public var addRestaurants: (RestaurantCard) async throws -> String
     public var getDocument: () async throws -> Void
     public var getApprovedRestaurants: (RestaurantState) async throws -> Restaurants
@@ -29,7 +28,8 @@ public struct FirebaseClient {
     public var appleLogin: () async throws -> UserModel?
     public var logout: () async throws -> Void
     public var checkAuthState: () async throws -> UserModel?
-    
+    public var approveRestaurant: (RestaurantCard) async throws -> Bool
+
     // 초기화 상태 체크 함수 추가
     private static func ensureFirebaseInitialized() throws {
         guard FirebaseApp.app() != nil else {
@@ -55,12 +55,6 @@ public struct FirebaseClient {
     }
     
     public static let live = Self(
-        configure: {
-//            if FirebaseApp.app() == nil {
-//                FirebaseApp.configure()
-//            }
-            return
-        },
         addRestaurants: { data in
             
             try Self.ensureFirebaseInitialized()  // 초기화 상태 체크
@@ -380,11 +374,30 @@ public struct FirebaseClient {
                 return userModel
             }
             return nil
+        }, 
+        approveRestaurant: { restaurant in
+            try Self.ensureFirebaseInitialized()
+
+            let db = Firestore.firestore()
+            
+            // 전화번호로 문서 찾음
+            let snapshot = try await db.collection("pending")
+                .whereField("phoneNumber", isEqualTo: restaurant.phoneNumber)
+                .getDocuments()
+            
+            if let doc = snapshot.documents.first {
+                let documentId = doc.documentID
+                // 여기서 승인 로직 수행
+                let data = doc.data()
+                try await db.collection("approved").document(documentId).setData(data)
+                try await db.collection("pending").document(documentId).delete()
+                return true
+            }
+            return false
         }
     )
     
     public static let mock = Self(
-        configure: { },
         addRestaurants: { _ in return "mock-document-id" },
         getDocument: { },
         getApprovedRestaurants: { state in 
@@ -417,7 +430,10 @@ public struct FirebaseClient {
         googleLogin: { return nil },
         appleLogin: { return nil },
         logout: {  },
-        checkAuthState: { return nil }
+        checkAuthState: { return nil },
+        approveRestaurant: { restaurant in
+            return true
+        }
     )
     
     private class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
