@@ -108,7 +108,6 @@ public struct RegisterRestaurantFeature: Equatable {
         case processSelectedItem(PhotosPickerItem)
         case imageLoaded(UIImage)
         case removeImage(Int)
-        case uploadImages([UIImage])
         case openTimeChanged(Date)
         case closeTimeChanged(Date)
         case breakStartTimeChanged(Date)
@@ -201,7 +200,7 @@ public struct RegisterRestaurantFeature: Equatable {
                 return .none
                 
             case .saveButtonTapped:
-                state.isLoading = true  // 저장 중임을 표시
+                state.isLoading = true
                 state.businessHours = state.computedBusinessHours
                 state.breaktime = state.computedBreaktime
                 return .run { [state] send in
@@ -243,6 +242,7 @@ public struct RegisterRestaurantFeature: Equatable {
 
             case let .saveFailed(error):
                 print("세이브실패 : \(error)")
+                state.isLoading = false
                 return .none
                 
             case let .validateAdress(address):
@@ -262,22 +262,19 @@ public struct RegisterRestaurantFeature: Equatable {
                     state.validateAddress = geocodingResponse.documents[0].addressName
                     state.latitude = data.y
                     state.longitude = data.x
+                    state.isLoading = false
                     return .none
                 } else {
                     state.validateAddress = "정확한 주소를 입력해주세요."
                 }
+                state.isLoading = false
                 return .none
                 
             case let .validateAdressResponse(.failure(error)):
                 print("지오코딩 실패: \(error)")
+                state.isLoading = false
                 return .none
-                
-                
-            case let .uploadImages(images):
-                state.isLoading = true  // 저장 중임을 표시
-                
-                return .none
-                
+        
             case let .alert(.presented(alertAction)):
                 
                 switch alertAction {

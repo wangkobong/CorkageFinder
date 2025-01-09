@@ -61,10 +61,12 @@ public struct MapFeature: Equatable {
                 
             case let .fetchRestaurantsResponse(.success(response)):
                 state.allRestaurants = response.restaurants
+                state.isLoading = false
                 return .send(.addRestaurantPOIs)
                 
             case let .fetchRestaurantsResponse(.failure(error)):
                 print("페치 실패: \(error)")
+                state.isLoading = false
                 return .none
                 
             case .addRestaurantPOIs:

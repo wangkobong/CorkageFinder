@@ -52,6 +52,7 @@ public struct MapView: View {
                 RestaurantDetailView(store: state)
             }
         }
+        .loadingOverlay(isLoading: store.isLoading)
     }
         
 }
