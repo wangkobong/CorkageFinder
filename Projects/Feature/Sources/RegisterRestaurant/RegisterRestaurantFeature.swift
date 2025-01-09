@@ -190,7 +190,7 @@ public struct RegisterRestaurantFeature: Equatable {
                 return .none
                 
             case let .phoneNumberChanged(phoneNumber):
-                state.phoneNumber = phoneNumber
+                state.phoneNumber = phoneNumber.filter { $0.isNumber }
                 return .none
 
             case let .closedDaysChanged(closedDays):

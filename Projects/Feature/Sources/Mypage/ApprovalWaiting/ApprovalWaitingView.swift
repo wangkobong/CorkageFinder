@@ -53,6 +53,7 @@ struct ApprovalWaitingView: View {
         .onAppear {
             store.send(.fetchPendingRestaurants)
         }
+        .loadingOverlay(isLoading: store.isLoading)
     }
 }
 

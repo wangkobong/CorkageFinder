@@ -150,6 +150,7 @@ extension RegisterRestaurantView {
     private var contactInfoSection: some View {
         Section(header: Text("연락처 및 영업시간")) {
             TextField("전화번호", text: $store.phoneNumber.sending(\.phoneNumberChanged))
+                .keyboardType(.numberPad)
             HStack {
                  Text("영업시간")
                  Spacer()

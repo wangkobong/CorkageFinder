@@ -59,9 +59,11 @@ public struct ApprovalWaitingFeature: Equatable {
                 }
             case let .fetchPendingRestaurantsResponse(.success(response)):
                 state.pendingRestaurants = response.restaurants
+                state.isLoading = false
                 return .none
                 
             case let .fetchPendingRestaurantsResponse(.failure(error)):
+                state.isLoading = false
                 print("페치 실패: \(error)")
                 return .none
                 
@@ -77,10 +79,13 @@ public struct ApprovalWaitingFeature: Equatable {
                 
             case let .approveRestaurantResponse(.success(response)):
                 if response == true {
+                    state.isLoading = false
                     return .send(.fetchPendingRestaurants)
                 }
+                state.isLoading = false
                 return .none
             case let .approveRestaurantResponse(.failure(error)):
+                state.isLoading = false
                 print("페치 실패: \(error)")
                 return .none
             case let .restaurantDetailTap(restaurant):
