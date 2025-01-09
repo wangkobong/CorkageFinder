@@ -52,11 +52,13 @@ public struct RegisterRestaurantFeature: Equatable {
         public var breakEndTime: Date = Calendar.current.date(from: DateComponents(hour: 15, minute: 0)) ?? Date()
         
         var isSubmitButtonEnabled: Bool {
-            !name.isEmpty &&
-            !phoneNumber.isEmpty &&
-            !businessHours.isEmpty &&
-            isLocationValid
+            let enabled = !name.isEmpty &&
+                !phoneNumber.isEmpty &&
+                isLocationValid
+
+            return enabled
         }
+
         
         var isLocationValid: Bool {
             !validateAddress.isEmpty && validateAddress != "정확한 주소를 입력해주세요."  && !latitude.isEmpty && !longitude.isEmpty
@@ -276,7 +278,7 @@ public struct RegisterRestaurantFeature: Equatable {
                 return .none
         
             case let .alert(.presented(alertAction)):
-                
+                state.isLoading = false
                 switch alertAction {
                 case .completeSave:
                     state.alert = AlertState {
@@ -289,7 +291,6 @@ public struct RegisterRestaurantFeature: Equatable {
                     return .none
                     
                 case .saveConfirmed:
-                    state.isLoading = false
                     state.selectedImages = []
                     state.name = ""
                     state.category = .korean
@@ -309,6 +310,10 @@ public struct RegisterRestaurantFeature: Equatable {
                     state.longitude = ""
                     state.isBreaktime = false
                     state.breaktime = ""
+                    state.openTime = Calendar.current.date(from: DateComponents(hour: 9, minute: 0)) ?? Date()
+                    state.closeTime = Calendar.current.date(from: DateComponents(hour: 18, minute: 0)) ?? Date()
+                    state.isLoading = false
+
                     return .none
                 }
                 

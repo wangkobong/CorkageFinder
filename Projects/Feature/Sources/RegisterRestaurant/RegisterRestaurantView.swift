@@ -205,7 +205,7 @@ extension RegisterRestaurantView {
                 .foregroundColor(.white)
         }
         .listRowBackground(store.isSubmitButtonEnabled ? Color.blue : Color.gray.opacity(0.5))
-        .disabled(store.isSubmitButtonEnabled)
+        .disabled(!store.isSubmitButtonEnabled)
     }
 }
 
