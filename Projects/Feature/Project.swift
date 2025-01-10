@@ -35,10 +35,14 @@ let project = Project(
             destinations: .iOS,
             product: .unitTests,
             bundleId: "io.tuist.FeatureTests",
+            deploymentTargets: .iOS("17.5"),
             infoPlist: .default,
             sources: ["Tests/**"],
             resources: [],
-            dependencies: [.target(name: "Feature")]
+            dependencies: [
+                .target(name: "Feature"),
+                .external(name: "ComposableArchitecture")
+            ]
         ),
     ]
 )

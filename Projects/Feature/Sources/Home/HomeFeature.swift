@@ -31,7 +31,12 @@ public struct HomeFeature: Equatable {
         public init() {}
     }
     
-    public enum Action {
+    public enum Action: Equatable {
+        
+        public static func == (lhs: HomeFeature.Action, rhs: HomeFeature.Action) -> Bool {
+            return true
+        }
+        
         case fetchHomeData
         case fetchHomeDataResponse(TaskResult<HomeData>)
         case searchTextChanged(String)
